@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
 using OpenHAB.Core;
 using OpenHAB.Core.Messages;
+using OpenHAB.Core.Services;
 using OpenHAB.Windows.Controls;
 using OpenHAB.Windows.Services;
 using OpenHAB.Windows.ViewModel;
@@ -19,6 +20,7 @@ namespace OpenHAB.Windows.View
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private IAppManager _appManager;
         private ILogger<SettingsViewModel> _logger;
         private SettingsViewModel _settingsViewModel;
 
@@ -35,20 +37,37 @@ namespace OpenHAB.Windows.View
             _logger = (ILogger<SettingsViewModel>)DIService.Instance.Services.GetService(typeof(ILogger<SettingsViewModel>));
 
             SettingOptionsListView.SelectedIndex = 0;
+
+            _appManager = (IAppManager)DIService.Instance.Services.GetService(typeof(IAppManager));
         }
 
         #region Page Navigation
 
         /// <inheritdoc/>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            Messenger.Default.Register<SettingsUpdatedMessage>(this, msg => HandleSettingsUpdate(msg));
+            Messenger.Default.Register<SettingsUpdatedMessage>(this, msg => HandleSettingsUpdate(msg), true);
+            Messenger.Default.Register<SettingsValidationMessage>(this, msg => NotificationSettingsValidation(msg), true);
+
+            var autostartEnabled = await _appManager.IsStartupEnabled().ConfigureAwait(false);
+            var canAppAutostartEnabled = await _appManager.CanEnableAutostart().ConfigureAwait(false);
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+              {
+                  _settingsViewModel.Settings.IsAppAutostartEnabled = autostartEnabled;
+                  _settingsViewModel.Settings.CanAppAutostartEnabled = canAppAutostartEnabled;
+              });
+
+            AppAutostartSwitch.Toggled += AppAutostartSwitch_Toggled;
         }
 
         /// <inheritdoc/>
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             Messenger.Default.Unregister<SettingsUpdatedMessage>(this, msg => HandleSettingsUpdate(msg));
+            Messenger.Default.Unregister<SettingsValidationMessage>(this, msg => NotificationSettingsValidation(msg));
+
+            AppAutostartSwitch.Toggled -= AppAutostartSwitch_Toggled;
         }
 
         #endregion
@@ -62,55 +81,8 @@ namespace OpenHAB.Windows.View
         {
             ConnectionDialog connectionDialog = new ConnectionDialog();
             connectionDialog.DefaultButton = ContentDialogButton.Primary;
+
             return connectionDialog;
-        }
-
-        private async void HandleSettingsUpdate(SettingsUpdatedMessage msg)
-        {
-            try
-            {
-                if (msg.IsSettingsValid && msg.SettingsPersisted)
-                {
-                    Frame.BackStack.Clear();
-                    Frame.Navigate(typeof(MainPage));
-
-                    return;
-                }
-                else if (!msg.IsSettingsValid)
-                {
-                    string message = AppResources.Values.GetString("MessageSettingsConnectionConfigInvalid");
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        SettingsNotification.Message = message;
-                        SettingsNotification.IsOpen = true;
-                    });
-                }
-                else
-                {
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        SettingsNotification.IsOpen = false;
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Show info message failed.");
-            }
-        }
-
-        private void OpenLocalConnectionButton_Click(object sender, RoutedEventArgs e)
-        {
-            ConnectionDialog connectionDialog = CreateConnectionDialog();
-            connectionDialog.DataContext = Vm.Settings.LocalConnection;
-            connectionDialog.ShowAsync();
-        }
-
-        private void OpenRemoteConnectionButton_Click(object sender, RoutedEventArgs e)
-        {
-            ConnectionDialog connectionDialog = CreateConnectionDialog();
-            connectionDialog.DataContext = Vm.Settings.RemoteConnection;
-            connectionDialog.ShowAsync();
         }
 
         private void AppSettingsListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
@@ -121,9 +93,75 @@ namespace OpenHAB.Windows.View
 
         private void ConnectionSettingsListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
             AppSettings.Visibility = Visibility.Collapsed;
             ConnectionSettings.Visibility = Visibility.Visible;
+        }
+
+        private void HandleSettingsUpdate(SettingsUpdatedMessage msg)
+        {
+            try
+            {
+                if (msg.IsSettingsValid && msg.SettingsPersisted)
+                {
+                    Frame.BackStack.Clear();
+                    Frame.Navigate(typeof(MainPage));
+
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Show info message failed.");
+            }
+        }
+
+        private void NotificationSettingsValidation(SettingsValidationMessage msg)
+        {
+            try
+            {
+                if (!msg.IsSettingsValid)
+                {
+                    string message = AppResources.Values.GetString("MessageSettingsConnectionConfigInvalid");
+
+                    SettingsNotification.Message = message;
+                    SettingsNotification.IsOpen = true;
+                }
+                else
+                {
+                    SettingsNotification.IsOpen = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Show info message failed.");
+            }
+        }
+
+        private async void OpenLocalConnectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConnectionDialog connectionDialog = CreateConnectionDialog();
+            connectionDialog.DataContext = Vm.Settings.LocalConnection;
+
+            await connectionDialog.ShowAsync();
+        }
+
+        private async void OpenRemoteConnectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConnectionDialog connectionDialog = CreateConnectionDialog();
+            connectionDialog.DataContext = Vm.Settings.RemoteConnection;
+
+            await connectionDialog.ShowAsync();
+        }
+
+        private async void AppAutostartSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            await _appManager.ToggleAutostart();
+
+            var autostartEnabled = await _appManager.IsStartupEnabled().ConfigureAwait(false);
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                _settingsViewModel.Settings.IsAppAutostartEnabled = autostartEnabled;
+            });
         }
     }
 }

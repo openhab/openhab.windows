@@ -105,7 +105,6 @@
   <ItemGroup>
     <Compile Include="AppResources.cs" />
     <Compile Include="Common\ActionCommand.cs" />
-    <Compile Include="Common\ErrorTypes.cs" />
     <Compile Include="Common\ColorChangedEventArgs.cs" />
     <Compile Include="Common\ColorHelper.cs" />
     <Compile Include="Common\Constants.cs" />
@@ -114,6 +113,8 @@
     <Compile Include="Common\DeviceTypeHelper.cs" />
     <Compile Include="Common\HttpResponseResult.cs" />
     <Compile Include="Common\ObservableCollectionExtensions.cs" />
+    <Compile Include="Messages\ItemStateChangedMessage.cs" />
+    <Compile Include="Messages\SettingsValidationMessage.cs" />
     <Compile Include="Model\Connection\CloudConnectionProfile.cs" />
     <Compile Include="Model\Connection\DemoConnectionProfile.cs" />
     <Compile Include="Model\Connection\RemoteConnectionProfile.cs" />
@@ -129,13 +130,16 @@
     <Compile Include="Messages\UpdateItemMessage.cs" />
     <Compile Include="Messages\WidgetClickedMessage.cs" />
     <Compile Include="Model\Connection\DefaultConnectionProfile.cs" />
+    <Compile Include="Common\Enum.cs" />
+    <Compile Include="Model\OpenHABAPIInfo.cs" />
+    <Compile Include="Model\OpenHABConnectionProfile.cs" />
+    <Compile Include="Model\OpenHABConnectionType.cs" />
+    <Compile Include="Model\Event\OpenHABEventType.cs" />
     <Compile Include="Model\Link.cs" />
-    <Compile Include="Model\OpernAPIInfo.cs" />
     <Compile Include="Model\RuntimeInfo.cs" />
     <Compile Include="Model\WidgetTypeEnum.cs" />
-    <Compile Include="Model\EventStreamData.cs" />
-    <Compile Include="Model\EventStreamPayload.cs" />
-    <Compile Include="Model\OpenHABCommand.cs" />
+    <Compile Include="Model\Event\EventStreamData.cs" />
+    <Compile Include="Model\Event\EventStreamPayload.cs" />
     <Compile Include="Model\OpenHABCommandOptions.cs" />
     <Compile Include="Model\Connection\OpenHABConnection.cs" />
     <Compile Include="Model\OpenHABItem.cs" />
@@ -154,6 +158,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDK\IOpenHAB.cs" />
     <Compile Include="SDK\OpenHABClient.cs" />
+    <Compile Include="Services\AppManager.cs" />
+    <Compile Include="Model\Event\OpenHABEvent.cs" />
+    <Compile Include="Services\IItemManager.cs" />
+    <Compile Include="Services\ItemManager.cs" />
+    <Compile Include="Services\Notification\IOpenHABEventParser.cs" />
+    <Compile Include="Services\Notification\OpenHABEventParser.cs" />
+    <Compile Include="Services\IAppManager.cs" />
+    <Compile Include="Services\IconCaching.cs" />
+    <Compile Include="Services\IIconCaching.cs" />
+    <Compile Include="Services\Notification\INotificationManager.cs" />
+    <Compile Include="Services\Notification\NotificationManager.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\WidgetNavigationService.cs" />
     <EmbeddedResource Include="Properties\OpenHAB.Core.rd.xml" />
@@ -168,7 +183,7 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.11</Version>
+      <Version>6.2.12</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Services.Store.Engagement">
       <Version>10.1901.28001</Version>
@@ -176,8 +191,11 @@
     <PackageReference Include="Microsoft.Toolkit.Uwp.Connectivity">
       <Version>6.1.1</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
+      <Version>6.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.6.0-prerelease.210113001</Version>
+      <Version>2.6.0-prerelease.210129001</Version>
     </PackageReference>
     <PackageReference Include="MvvmLightLibs">
       <Version>5.4.1.1</Version>

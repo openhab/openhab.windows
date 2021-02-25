@@ -1,4 +1,4 @@
-﻿namespace OpenHAB.Core.Model
+﻿namespace OpenHAB.Core.Model.Event
 {
     /// <summary>
     /// Data coming from the eventstream.

@@ -7,7 +7,7 @@ namespace OpenHAB.Core.Services
     /// <summary>
     /// Service that keeps track of navigation between linkedpages.
     /// </summary>
-    public static class WidgetNavigationService
+    public class WidgetNavigationService
     {
         private static readonly Stack<OpenHABWidget> WidgetBackStack = new Stack<OpenHABWidget>();
         private static OpenHABWidget _currentWidget;
@@ -47,6 +47,15 @@ namespace OpenHAB.Core.Services
             _currentWidget = WidgetBackStack.Count == 0 ? null : WidgetBackStack.Peek();
 
             return _currentWidget;
+        }
+
+        /// <summary>
+        /// Clears and resets the widget navigation.
+        /// </summary>
+        public static void ClearWidgetNavigation()
+        {
+            _currentWidget = null;
+            WidgetBackStack.Clear();
         }
     }
 }

@@ -4,11 +4,11 @@
 	  xmlns:converters="using:OpenHAB.Windows.Converters"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:community="using:Microsoft.Toolkit.Uwp.UI.Controls"
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-	  mc:Ignorable="d">
+	  mc:Ignorable="d"
+	  x:Name="SettingsView">
 
 	<Page.Background>
 		<ImageBrush ImageSource="/Assets/background.jpg"
@@ -123,27 +123,81 @@
 					<StackPanel Grid.Row="0"
 								Orientation="Vertical">
 						<!-- App Settings -->
-						<StackPanel x:Name="AppSettings"
-									Margin="0,0,0,25"
-									Padding="12"
-									Background="{ThemeResource OpenHABLightColor}">
-							<TextBlock x:Uid="AppSettings"
-									   Style="{StaticResource TitleTextBlockStyle}"
-									   Margin="0,0,0,10" />
-							<TextBlock x:Uid="ShowDefaultSitemap"
-									   Margin="0,0,0,10" />
-							<ToggleSwitch x:Name="CheckBoxHideDefaultSitemap"
-										  Margin="0,0,0,12"
-										  HorizontalAlignment="Stretch"
-										  VerticalAlignment="Stretch"
-										  IsOn="{Binding Settings.ShowDefaultSitemap, Mode=TwoWay}" />
-							<TextBlock x:Uid="AppLanguage"
-									   Margin="0,0,0,10" />
-							<ComboBox Margin="0,0,0,12"
-									  ItemsSource="{Binding Settings.AppLanguages}"
-									  DisplayMemberPath="Name"
-									  SelectedItem="{Binding Settings.SelectedAppLanguage, Mode=TwoWay}" />
+						<StackPanel x:Name="AppSettings">
+							<StackPanel Margin="0,0,0,25"
+										Padding="12"
+										Background="{ThemeResource OpenHABLightColor}">
+								<TextBlock x:Uid="AppSettings"
+										   Style="{StaticResource TitleTextBlockStyle}"
+										   Margin="0,0,0,10" />
+								<TextBlock x:Uid="AppAutostart"
+										   Margin="0,0,0,10" />
+								<ToggleSwitch x:Name="AppAutostartSwitch"
+											  Margin="0,0,0,12"
+											  HorizontalAlignment="Stretch"
+											  VerticalAlignment="Stretch"
+											  IsEnabled="{Binding Settings.CanAppAutostartEnabled, Mode=TwoWay}"
+											  IsOn="{Binding Settings.IsAppAutostartEnabled, Mode=TwoWay}" />
+								<TextBlock x:Uid="StartAppMinimized"
+										   Margin="0,0,0,10" />
+								<ToggleSwitch x:Name="StartAppMinimizedSwitch"
+											  Margin="0,0,0,12"
+											  HorizontalAlignment="Stretch"
+											  VerticalAlignment="Stretch"
+											  IsOn="{Binding Settings.StartAppMinimized, Mode=TwoWay}" />
+								<TextBlock x:Uid="AppLanguage"
+										   Margin="0,0,0,10" />
+								<ComboBox Margin="0,0,0,12"
+										  ItemsSource="{Binding Settings.AppLanguages}"
+										  DisplayMemberPath="Name"
+										  SelectedItem="{Binding Settings.SelectedAppLanguage, Mode=TwoWay}" />
+							</StackPanel>
+
+							<StackPanel Margin="0,0,0,25"
+										Padding="12"
+										Background="{ThemeResource OpenHABLightColor}">
+								<TextBlock x:Uid="NotificationSetting"
+										   Style="{StaticResource TitleTextBlockStyle}"
+										   Margin="0,0,0,10" />
+								<TextBlock x:Uid="EnableWindowsNotifications"
+										   Margin="0,0,0,10" />
+								<ToggleSwitch Margin="0,0,0,12"
+											  HorizontalAlignment="Stretch"
+											  VerticalAlignment="Stretch"
+											  IsOn="{Binding Settings.NotificationsEnable, Mode=TwoWay}" />
+							</StackPanel>
+
+							<StackPanel Margin="0,0,0,25"
+										Padding="12"
+										Background="{ThemeResource OpenHABLightColor}">
+								<TextBlock x:Uid="SitemapSetting"
+										   Style="{StaticResource TitleTextBlockStyle}"
+										   Margin="0,0,0,10" />
+								<TextBlock x:Uid="ShowDefaultSitemap"
+										   Margin="0,0,0,10" />
+								<ToggleSwitch x:Name="CheckBoxHideDefaultSitemap"
+											  Margin="0,0,0,12"
+											  HorizontalAlignment="Stretch"
+											  VerticalAlignment="Stretch"
+											  IsOn="{Binding Settings.ShowDefaultSitemap, Mode=TwoWay}" />
+								<TextBlock x:Uid="SVGIcons"
+										   Margin="0,0,0,10" />
+								<ToggleSwitch x:Name="CheckBoxSVGIcons"
+											  Margin="0,0,0,12"
+											  HorizontalAlignment="Stretch"
+											  VerticalAlignment="Stretch"
+											  IsOn="{Binding Settings.UseSVGIcons, Mode=TwoWay}" />
+								<TextBlock x:Uid="ClearIconCache"
+										   Margin="0,0,0,10" />
+								<Button x:Uid="ClearIconCacheButton"
+										Margin="0,0,0,12"
+										HorizontalAlignment="Left"
+										VerticalAlignment="Center"
+										Command="{x:Bind Vm.ClearIconCacheCommand}" />
+							</StackPanel>
 						</StackPanel>
+
+
 
 						<!-- Connection Settings -->
 						<Grid x:Name="ConnectionSettings"

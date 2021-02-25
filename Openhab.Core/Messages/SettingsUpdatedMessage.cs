@@ -10,8 +10,8 @@
         /// <param name="settingsPersisted">Indicates settings changes are persisted.</param>
         public SettingsUpdatedMessage(bool isSettingsValid, bool settingsPersisted)
         {
-            IsSettingsValid = isSettingsValid;
             SettingsPersisted = settingsPersisted;
+            IsSettingsValid = isSettingsValid;
         }
 
         /// <summary>Gets a value indicating whether settings update valid.</summary>

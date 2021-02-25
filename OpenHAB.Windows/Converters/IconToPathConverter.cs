@@ -13,6 +13,14 @@ namespace OpenHAB.Windows.Converters
     /// </summary>
     public class IconToPathConverter : IValueConverter
     {
+        private Settings _settings;
+
+        /// <summary>Initializes a new instance of the <see cref="IconToPathConverter" /> class.</summary>
+        public IconToPathConverter()
+        {
+            _settings = (Settings)DIService.Instance.Services.GetService(typeof(Settings));
+        }
+
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -23,6 +31,7 @@ namespace OpenHAB.Windows.Converters
 
             var widget = value as OpenHABWidget;
             var state = widget.Item?.State ?? "ON";
+            string iconFormat = _settings.UseSVGIcons ? "svg" : "png";
 
             var regMatch = Regex.Match(state, @"\d+");
             if (regMatch.Success)
@@ -31,7 +40,7 @@ namespace OpenHAB.Windows.Converters
             }
 
             return openHABVersion == OpenHABVersion.Two || openHABVersion == OpenHABVersion.Three ?
-                $"{serverUrl}icon/{widget.Icon}?state={state}&format=png" :
+                $"{serverUrl}icon/{widget.Icon}?state={state}&format={iconFormat}" :
                 $"{serverUrl}images/{widget.Icon}.png";
         }
 

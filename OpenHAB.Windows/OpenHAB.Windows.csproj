@@ -194,7 +194,6 @@
     <Compile Include="Controls\WidgetBase.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToColorBrushConverter.cs" />
-    <Compile Include="Converters\BoolToBackgroundColorConverter.cs" />
     <Compile Include="Converters\IconToBitmapConverter.cs" />
     <Compile Include="Converters\IconToPathConverter.cs" />
     <Compile Include="Converters\MenuItemTemplateSelector.cs" />
@@ -207,12 +206,12 @@
     <Compile Include="Converters\WidgetTemplateSelector.cs" />
     <Compile Include="Converters\ZeroToVisibilityConverter.cs" />
     <Compile Include="DIService.cs" />
-    <Compile Include="ErrorMessageTranslator.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModel\ConfigurationViewModel.cs" />
     <Compile Include="ViewModel\ConnectionDialogViewModel.cs" />
     <Compile Include="ViewModel\ConnectionProfileViewModel.cs" />
+    <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\LanguageViewModel.cs" />
     <Compile Include="ViewModel\LogsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -401,8 +400,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpenHAB.Core\openHAB.Core.csproj">
+      <Project>{2a8fd10e-4ee5-4e25-b47c-2296e071f482}</Project>
+      <Name>openHAB.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
       <Name>Microsoft Engagement Framework</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
     <SDKReference Include="WindowsDesktop, Version=10.0.19041.0">
       <Name>Windows Desktop Extensions for the UWP</Name>
@@ -418,7 +426,7 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.11</Version>
+      <Version>6.2.12</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Services.Store.Engagement">
       <Version>10.1901.28001</Version>
@@ -427,7 +435,7 @@
       <Version>6.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.6.0-prerelease.210113001</Version>
+      <Version>2.6.0-prerelease.210129001</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>

@@ -12,7 +12,8 @@ namespace OpenHAB.Core.Model.Connection
         /// <value>The profile.</value>
         public IConnectionProfile Profile
         {
-            get;set;
+            get;
+            set;
         }
 
         /// <summary>Gets or sets the type of the connection.</summary>

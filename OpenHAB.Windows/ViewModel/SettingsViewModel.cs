@@ -1,9 +1,9 @@
 using System;
-using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
 using OpenHAB.Core.Common;
 using OpenHAB.Core.Messages;
+using OpenHAB.Core.Services;
 using Windows.ApplicationModel;
 
 namespace OpenHAB.Windows.ViewModel
@@ -13,25 +13,31 @@ namespace OpenHAB.Windows.ViewModel
     /// </summary>
     public class SettingsViewModel : ViewModelBase<object>
     {
+        private readonly IIconCaching _iconCaching;
         private readonly ILogger<SettingsViewModel> _logger;
+        private ActionCommand _clearIconCacheCommand;
         private ConfigurationViewModel _configuration;
         private ActionCommand _saveCommand;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsViewModel"/> class.
         /// </summary>
-        public SettingsViewModel(ConfigurationViewModel configurationViewModel, ILogger<SettingsViewModel> logger)
+        public SettingsViewModel(ConfigurationViewModel configurationViewModel, IIconCaching iconCaching, ILogger<SettingsViewModel> logger)
             : base(new object())
         {
             _configuration = configurationViewModel;
             _configuration.PropertyChanged += Configuration_PropertyChanged;
+
+            _iconCaching = iconCaching;
+
             _logger = logger;
         }
 
-        private void Configuration_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            SaveCommand.InvokeCanExecuteChanged(null);
-        }
+        /// <summary>
+        /// Gets the clear icon cache command to persist the settings.
+        /// </summary>
+        /// <value>The save command.</value>
+        public ActionCommand ClearIconCacheCommand => _clearIconCacheCommand ?? (_clearIconCacheCommand = new ActionCommand(ClearIcons, CanClearIcons));
 
         /// <summary>
         /// Gets the save command to persist the settings.
@@ -76,10 +82,9 @@ namespace OpenHAB.Windows.ViewModel
             bool validConnectionConfig = CheckForValidConnectionConfig();
             if (validConnectionConfig)
             {
-                _configuration.Save();
+                bool savedSuccessful = _configuration.Save();
+                Messenger.Default.Send(new SettingsUpdatedMessage(validConnectionConfig, savedSuccessful));
             }
-
-            Messenger.Default.Send(new SettingsUpdatedMessage(validConnectionConfig, true));
         }
 
         private bool CheckForValidConnectionConfig()
@@ -88,12 +93,27 @@ namespace OpenHAB.Windows.ViewModel
                (_configuration.IsRunningInDemoMode.HasValue && _configuration.IsRunningInDemoMode.Value);
         }
 
+        private bool CanClearIcons(object arg)
+        {
+            return true;
+        }
+
         private bool CanPersistSettings(object arg)
         {
             bool validConnectionConfig = CheckForValidConnectionConfig();
-            Messenger.Default.Send(new SettingsUpdatedMessage(validConnectionConfig, false));
+            Messenger.Default.Send(new SettingsValidationMessage(validConnectionConfig));
 
             return validConnectionConfig && _configuration.IsDirty;
+        }
+
+        private void ClearIcons(object obj)
+        {
+            _iconCaching.ClearIconCache();
+        }
+
+        private void Configuration_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            SaveCommand.InvokeCanExecuteChanged(null);
         }
     }
 }

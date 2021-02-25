@@ -5,14 +5,13 @@ namespace OpenHAB.Core.Common
 {
     /// <summary>HTTP response result.</summary>
     /// <typeparam name="T">Content Type.</typeparam>
-    /// <typeparam name="TS">Error Type.</typeparam>
     public class HttpResponseResult<T>
     {
         /// <summary>Initializes a new instance of the <see cref="HttpResponseResult{T}" /> class.</summary>
         /// <param name="content">The content.</param>
         /// <param name="statusCode">The status code.</param>
         public HttpResponseResult(T content, HttpStatusCode? statusCode)
-            : this (content, statusCode, null)
+            : this(content, statusCode, null)
         {
         }
 

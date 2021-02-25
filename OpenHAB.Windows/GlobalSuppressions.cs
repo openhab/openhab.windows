@@ -3,7 +3,6 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1507:Code must not contain multiple blank lines in a row", Justification = "<Pending>", Scope = "member", Target = "~M:OpenHAB.Windows.Converters.WidgetTemplateSelector.GetItemViewType(OpenHAB.Core.Model.OpenHABWidget)~System.String")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:Arithmetic expressions must declare precedence", Justification = "<Pending>", Scope = "member", Target = "~M:OpenHAB.Windows.Controls.RadialSlider.ScalePoint(System.Double,System.Double)~Windows.Foundation.Point")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:Arithmetic expressions must declare precedence", Justification = "<Pending>", Scope = "member", Target = "~M:OpenHAB.Windows.Controls.RadialSlider.ValueToAngle(System.Double)~System.Double")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:Arithmetic expressions must declare precedence", Justification = "<Pending>", Scope = "member", Target = "~M:OpenHAB.Windows.Controls.RadialSlider.OnApplyTemplate")]

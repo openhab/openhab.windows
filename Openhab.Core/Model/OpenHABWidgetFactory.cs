@@ -26,7 +26,7 @@ namespace OpenHAB.Core.Model
 
             OpenHABWidget widget = new OpenHABWidget()
             {
-                Id = startNode.Element("widgetId")?.Value,
+                WidgetId = startNode.Element("widgetId")?.Value,
                 Type = startNode.Element("type")?.Value,
                 Label = startNode.Element("label")?.Value,
                 State = startNode.Element("state")?.Value,

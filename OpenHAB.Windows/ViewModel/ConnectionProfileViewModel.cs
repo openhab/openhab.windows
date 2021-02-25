@@ -22,11 +22,14 @@ namespace OpenHAB.Core.Contracts
 
         /// <summary>Gets a value indicating whether [allow ignore SSL certificate] issues option is available.</summary>
         /// <value>
-        ///   <c>true</c> if [allow ignore SSL certificate] is available; otherwise, <c>false</c>.</value>
+        ///   <c>true</c> if [allow ignore SSL certificate] is available; otherwise, <c>false</c>.
+        /// </value>
         public bool AllowIgnoreSSLCertificate => Model.AllowIgnoreSSLCertificate;
 
         /// <summary>Gets a value indicating whether [allow ignore SSL hostname] issue option is available.</summary>
-        /// <c>true.</c> if [allow ignore SSL hostname] can be enabled; otherwise, <c>false.</c></value>
+        /// <value>
+        /// <c>true.</c> if [allow ignore SSL hostname] can be enabled; otherwise, <c>false.</c>.
+        /// </value>
         public bool AllowIgnoreSSLHostname => Model.AllowIgnoreSSLHostname;
 
         /// <summary>Gets the connection profile id.</summary>

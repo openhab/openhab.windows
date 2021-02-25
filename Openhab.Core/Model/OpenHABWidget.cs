@@ -10,7 +10,7 @@ namespace OpenHAB.Core.Model
     /// <summary>
     /// A class that represents an OpenHAB widget.
     /// </summary>
-    public class OpenHABWidget : INotifyPropertyChanged
+    public class OpenHABWidget : INotifyPropertyChanged, IEquatable<OpenHABWidget>
     {
         private string _icon;
         private string _label;
@@ -39,7 +39,7 @@ namespace OpenHAB.Core.Model
         /// <summary>
         /// Gets or sets the ID of the OpenHAB widget.
         /// </summary>
-        public string Id
+        public string WidgetId
         {
             get; set;
         }
@@ -249,5 +249,61 @@ namespace OpenHAB.Core.Model
             get;
             set;
         }
+
+        #region IEquatable Implementation
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return WidgetId.GetHashCode();
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            OpenHABWidget widget = (OpenHABWidget)obj;
+
+            if (widget == null)
+            {
+                return false;
+            }
+
+            return Equals(widget);
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(OpenHABWidget other)
+        {
+            if (string.IsNullOrEmpty(WidgetId) || ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
+            return WidgetId.CompareTo(other.WidgetId) == 0;
+        }
+
+        /// <inheritdoc/>
+        public static bool operator ==(OpenHABWidget widget1, OpenHABWidget widget2)
+        {
+            if (ReferenceEquals(widget1, null))
+            {
+                return ReferenceEquals(widget2, null);
+            }
+
+            return widget1.Equals(widget2);
+        }
+
+        /// <inheritdoc/>
+        public static bool operator !=(OpenHABWidget widget1, OpenHABWidget widget2)
+        {
+            if (ReferenceEquals(widget1, null))
+            {
+                return false;
+            }
+
+            return !widget1.Equals(widget2);
+        }
+
+        #endregion
     }
 }

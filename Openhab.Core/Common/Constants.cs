@@ -24,7 +24,7 @@
         /// <summary>
         /// Holds the constants used in server calls.
         /// </summary>
-        public sealed class Api
+        public sealed class API
         {
             /// <summary>
             /// Url used for Demo mode.
@@ -55,6 +55,11 @@
             /// The call to get an event-stream.
             /// </summary>
             public const string Events = "rest/events";
+
+            /// <summary>
+            /// The call to get items.
+            /// </summary>
+            public const string Items = "rest/items";
         }
     }
 }

@@ -6,6 +6,7 @@ using OpenHAB.Core.Contracts.Services;
 using OpenHAB.Core.Model;
 using OpenHAB.Core.Model.Connection;
 using OpenHAB.Core.SDK;
+using OpenHAB.Core.Services;
 
 namespace OpenHAB.Windows.ViewModel
 {
@@ -18,21 +19,27 @@ namespace OpenHAB.Windows.ViewModel
         private readonly Settings _settings;
         private readonly ISettingsService _settingsService;
         private List<LanguageViewModel> _appLanguages;
+        private bool? _canAppAutostartEnabled;
+        private bool? _isAppAutostartEnabled;
         private bool? _isRunningInDemoMode;
         private ConnectionDialogViewModel _localConnection;
         private ConnectionDialogViewModel _remoteConnection;
         private LanguageViewModel _selectedAppLanguage;
+
         private bool _showDefaultSitemap;
+        private bool? _startAppMinimized;
+        private bool _useSVGIcons;
+        private bool? _notificationsEnable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationViewModel"/> class.
         /// </summary>
-        public ConfigurationViewModel(ISettingsService settingsService, IOpenHAB openHabsdk, ILogger<ConfigurationViewModel> logger)
+        public ConfigurationViewModel(ISettingsService settingsService, IOpenHAB openHabsdk, ILogger<ConfigurationViewModel> logger, Settings settings)
             : base(new object())
         {
             _settingsService = settingsService;
             _logger = logger;
-            _settings = settingsService.Load();
+            _settings = settings;
 
             _localConnection = new ConnectionDialogViewModel(_settings.LocalConnection, openHabsdk, OpenHABHttpClientType.Local);
             _localConnection.PropertyChanged += ConnectionPropertyChanged;
@@ -42,6 +49,9 @@ namespace OpenHAB.Windows.ViewModel
 
             _isRunningInDemoMode = _settings.IsRunningInDemoMode;
             _showDefaultSitemap = _settings.ShowDefaultSitemap;
+            _useSVGIcons = _settings.UseSVGIcons;
+            _startAppMinimized = _settings.StartAppMinimized;
+            _notificationsEnable = _settings.NotificationsEnable;
 
             _appLanguages = InitalizeAppLanguages();
             _selectedAppLanguage =
@@ -64,6 +74,38 @@ namespace OpenHAB.Windows.ViewModel
             set
             {
                 Set(ref _appLanguages, value);
+            }
+        }
+
+        /// <summary>Gets or sets the can application autostart enabled.</summary>
+        /// <value>The can application autostart enabled.</value>
+        public bool? CanAppAutostartEnabled
+        {
+            get
+            {
+                return _canAppAutostartEnabled;
+            }
+
+            set
+            {
+                _canAppAutostartEnabled = value;
+                OnPropertyChanged(nameof(CanAppAutostartEnabled));
+            }
+        }
+
+        /// <summary>Gets or sets the is application autostart is enabled.</summary>
+        /// <value>The is application autostart enabled.</value>
+        public bool? IsAppAutostartEnabled
+        {
+            get
+            {
+                return _isAppAutostartEnabled;
+            }
+
+            set
+            {
+                _isAppAutostartEnabled = value;
+                OnPropertyChanged(nameof(IsAppAutostartEnabled));
             }
         }
 
@@ -113,6 +155,24 @@ namespace OpenHAB.Windows.ViewModel
             }
         }
 
+        /// <summary>Gets or sets the setting if notifications are enabled.</summary>
+        /// <value>The application triggers notification on openHAB events.</value>
+        public bool? NotificationsEnable
+        {
+            get
+            {
+                return _notificationsEnable;
+            }
+
+            set
+            {
+                if (Set(ref _notificationsEnable, value, true))
+                {
+                    _settings.NotificationsEnable = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Gets or sets remote OpenHAB connection configuration.
         /// </summary>
@@ -149,8 +209,8 @@ namespace OpenHAB.Windows.ViewModel
             }
         }
 
-        /// <summary>,
-        /// Gets or sets the if the default sitemap should be visible.
+        /// <summary>
+        /// Gets or sets a value indicating whether the default sitemap should be visible.
         /// </summary>
         /// <value>The hide default sitemap.</value>
         public bool ShowDefaultSitemap
@@ -169,14 +229,51 @@ namespace OpenHAB.Windows.ViewModel
             }
         }
 
+        /// <summary>Gets or sets the start application minimized.</summary>
+        /// <value>The start application minimized.</value>
+        public bool? StartAppMinimized
+        {
+            get
+            {
+                return _startAppMinimized;
+            }
+
+            set
+            {
+                if (Set(ref _startAppMinimized, value, true))
+                {
+                    _settings.StartAppMinimized = value;
+                }
+            }
+        }
+
+        /// <summary>Gets or sets a value indicating whether [use SVG icons].</summary>
+        /// <value>
+        ///   <c>true</c> if [use SVG icons]; otherwise, <c>false</c>.</value>
+        public bool UseSVGIcons
+        {
+            get
+            {
+                return _useSVGIcons;
+            }
+
+            set
+            {
+                if (Set(ref _useSVGIcons, value, true))
+                {
+                    _settings.UseSVGIcons = value;
+                }
+            }
+        }
+
         /// <summary>Determines whether [is connection configuration valid].</summary>
         /// <returns>
         ///   <c>true</c> if [is connection configuration valid]; otherwise, <c>false</c>.</returns>
         public bool IsConnectionConfigValid()
         {
             bool validConfig = IsRunningInDemoMode.Value ||
-                     !string.IsNullOrEmpty(LocalConnection?.Url) ||
-                     !string.IsNullOrEmpty(RemoteConnection?.Url);
+                     (!string.IsNullOrEmpty(LocalConnection?.Url) && LocalConnection?.State == OpenHABUrlState.OK) ||
+                     (!string.IsNullOrEmpty(RemoteConnection?.Url) && RemoteConnection?.State == OpenHABUrlState.OK);
 
             _logger.LogInformation($"Valid application configuration: {validConfig}");
 
@@ -186,13 +283,16 @@ namespace OpenHAB.Windows.ViewModel
         /// <summary>
         /// Persists the settings to disk.
         /// </summary>
-        public void Save()
+        /// <returns>True if settings saved successful, otherwise false.</returns>
+        public bool Save()
         {
             _settings.LocalConnection = _localConnection.Model;
             _settings.RemoteConnection = _remoteConnection.Model;
 
-            _settingsService.Save(_settings);
+            bool result = _settingsService.Save(_settings);
             _settingsService.SetProgramLanguage(null);
+
+            return result;
         }
 
         private void ConfigurationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -205,7 +305,7 @@ namespace OpenHAB.Windows.ViewModel
 
         private void ConnectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(IsDirty));
+             OnPropertyChanged(nameof(IsDirty));
         }
 
         private List<LanguageViewModel> InitalizeAppLanguages()

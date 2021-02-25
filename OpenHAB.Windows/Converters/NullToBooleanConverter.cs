@@ -20,7 +20,7 @@ namespace OpenHAB.Windows.Converters
         /// <exception cref="System.InvalidOperationException">The target must be a Visibility.</exception>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (targetType != typeof(Boolean))
+            if (targetType != typeof(bool))
             {
                 throw new InvalidOperationException("The target must be a Boolean");
             }

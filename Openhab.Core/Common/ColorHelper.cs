@@ -6,11 +6,10 @@ namespace OpenHAB.Core.Common
 {
     /// <summary>
     /// Helper methods for Color.
+    /// http://stackoverflow.com/a/19338652/62857.
     /// </summary>
     public static class ColorHelper
     {
-        // http://stackoverflow.com/a/19338652/62857
-
         /// <summary>
         /// Converts an HSL color value to RGB.
         /// Input: Vector4 ( X: [0.0, 1.0], Y: [0.0, 1.0], Z: [0.0, 1.0], W: [0.0, 1.0] )
@@ -121,7 +120,14 @@ namespace OpenHAB.Core.Common
             return new Vector4(h, s, l, rgba.A / 255.0f);
         }
 
-        // from http://stackoverflow.com/a/1626175/62857
+        /// <summary>
+        /// Converts to color enum to HSV value.
+        /// from http://stackoverflow.com/a/1626175/62857.
+        /// </summary>
+        /// <param name="color">The color.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public static Vector4 ToHSV(Color color)
         {
             double hue;
@@ -131,12 +137,11 @@ namespace OpenHAB.Core.Common
             return new Vector4((byte)(hue * 255), (byte)(saturation * 255), (byte)(value * 255), color.A / 255.0f);
         }
 
-        public static void ToHSV(Color rgba, out double hue, out double saturation, out double value)
+        private static void ToHSV(Color rgba, out double hue, out double saturation, out double value)
         {
             int max = Math.Max(rgba.R, Math.Max(rgba.G, rgba.B));
             int min = Math.Min(rgba.R, Math.Min(rgba.G, rgba.B));
 
-            // hue = color.GetHue();
             var hsl = ToHSL(rgba);
             hue = hsl.X;
 
@@ -144,6 +149,11 @@ namespace OpenHAB.Core.Common
             value = max / 255d;
         }
 
+        /// <summary>Converts HSV color to color enum value.</summary>
+        /// <param name="hsv">The HSV.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public static Color FromHSV(Vector4 hsv)
         {
             var c = FromHSV(hsv.X, hsv.Y, hsv.Z);
@@ -151,6 +161,13 @@ namespace OpenHAB.Core.Common
             return c;
         }
 
+        /// <summary>Convert the HSV value to color enum value.</summary>
+        /// <param name="hue">The hue.</param>
+        /// <param name="saturation">The saturation.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
         public static Color FromHSV(double hue, double saturation, double value)
         {
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;

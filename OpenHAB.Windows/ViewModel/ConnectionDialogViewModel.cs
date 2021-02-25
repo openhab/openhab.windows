@@ -29,7 +29,7 @@ namespace OpenHAB.Windows.ViewModel
         private ICommand _selectProfile;
         private string _url;
         private ICommand _urlCheckCommand;
-        private OpenHABUrlState _urlState;
+        private OpenHABUrlState _connectionState;
         private string _username;
         private bool? _willIgnoreSSLCertificate;
         private bool? _willIgnoreSSLHostname;
@@ -39,11 +39,13 @@ namespace OpenHAB.Windows.ViewModel
         /// </summary>
         /// <param name="connectionConfig">The connection configuration.</param>
         /// <param name="openHabsdk">OpenHABSDK class.</param>
+        /// <param name="type">Defines if openHAB instance is local or remote.</param>
         public ConnectionDialogViewModel(OpenHABConnection connectionConfig, IOpenHAB openHabsdk, OpenHABHttpClientType type)
             : base(connectionConfig)
         {
             _openHabsdk = openHabsdk;
             _type = type;
+            _connectionState = OpenHABUrlState.Unknown;
 
             List<ConnectionProfileViewModel> list
                 = new List<ConnectionProfileViewModel>(Settings.ConnectionProfiles.Where(x => x.Type == _type).OrderBy(x => x.Id).Select(x => new ConnectionProfileViewModel(x)));
@@ -53,6 +55,11 @@ namespace OpenHAB.Windows.ViewModel
             if (Model != null)
             {
                 _profile = list.FirstOrDefault(x => x.Id == Model.Profile.Id);
+            }
+
+            if (!string.IsNullOrEmpty(Model?.Url))
+            {
+                CheckConnectionSettings(Model.Url);
             }
         }
 
@@ -197,13 +204,13 @@ namespace OpenHAB.Windows.ViewModel
         public ICommand UrlCheckCommand => _urlCheckCommand ?? (_urlCheckCommand = new RelayCommand<object>(CheckConnectionSettings));
 
         /// <summary>
-        /// Gets or sets the state for OpenHab local URL.
+        /// Gets or sets the state for OpenHab connection.
         /// </summary>
-        /// <value>The state of the local URL.</value>
-        public OpenHABUrlState UrlState
+        /// <value>The state of the connection.</value>
+        public OpenHABUrlState State
         {
-            get => _urlState;
-            set => Set(ref _urlState, value);
+            get => _connectionState;
+            set => Set(ref _connectionState, value);
         }
 
         /// <summary>
@@ -257,7 +264,7 @@ namespace OpenHAB.Windows.ViewModel
             }
         }
 
-        private async void CheckConnectionSettings(object parameter)
+        private void CheckConnectionSettings(object parameter)
         {
             if (parameter == null)
             {
@@ -280,9 +287,9 @@ namespace OpenHAB.Windows.ViewModel
                 }
 
                 CoreDispatcher dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    UrlState = urlState;
+                    State = urlState;
                 });
             });
         }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using OpenHAB.Core.Common;
 using OpenHAB.Core.Model;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;

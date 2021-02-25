@@ -19,7 +19,8 @@
         /// </summary>
         public string ItemName
         {
-            get; set;
+            get; 
+            set;
         }
 
         /// <summary>

@@ -26,6 +26,8 @@ namespace OpenHAB.Core.Model.Connection
             get => true;
         }
 
+        /// <summary>Gets the connection profile îd.</summary>
+        /// <value>The îd.</value>
         public int Id
         {
             get => 2;

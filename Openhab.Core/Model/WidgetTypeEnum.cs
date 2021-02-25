@@ -1,21 +1,5 @@
-﻿using System;
-
-namespace OpenHAB.Core.Model
+﻿namespace OpenHAB.Core.Model
 {
-    /// <summary>
-    /// Now you can use Generics to have cleaner code when enum parsing!.
-    /// </summary>
-    /// <typeparam name="T">Enum type.</typeparam>
-    /// <example>
-    /// CT.Organ organNewParse = Enum.Parse("LENS");.
-    /// </example>
-    public static class Enum<T>
-    {
-        public static T Parse(string value, bool ignoreCase = true)
-        {
-            return (T)Enum.Parse(typeof(T), value, ignoreCase);
-        }
-    }
 
     /// <summary>
     /// All different Widget Types.

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap mp">
   <Identity Name="openHABFoundatione.V.openHAB" Publisher="CN=8A77D062-E996-4F32-9CC6-50568ABAFF8F" Version="2020.11.5.0" />
   <mp:PhoneIdentity PhoneProductId="84eff8f6-3c88-41b7-b1cc-1e3357b8e776" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -25,10 +25,18 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#FFFFFF" />
       </uap:VisualElements>
+      <Extensions>
+        <uap5:Extension Category="windows.startupTask" Executable="$targetnametoken$.exe" EntryPoint="OpenHAB.Windows.App">
+          <uap5:StartupTask TaskId="openHABStartupId" Enabled="false" DisplayName="openHAB" />
+        </uap5:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
     <Capability Name="privateNetworkClientServer" />
+    <rescap:Capability Name="appDiagnostics"/>
+    <rescap:Capability Name="extendedExecutionUnconstrained"/>
+    <rescap:Capability Name="extendedBackgroundTaskTime"/>
   </Capabilities>
 </Package>

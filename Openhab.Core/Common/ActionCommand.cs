@@ -15,20 +15,6 @@ namespace OpenHAB.Core.Common
         ///   Initializes a new instance of the <see cref = "ActionCommand" /> class.
         /// </summary>
         /// <param name = "execute">The execute.</param>
-        public ActionCommand(Action<object> execute, object canExecuteFeedbackCommand)
-        {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("Execute cannot be null");
-            }
-
-            _executeHandler = execute;
-        }
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "ActionCommand" /> class.
-        /// </summary>
-        /// <param name = "execute">The execute.</param>
         /// <param name = "canExecute">The can execute.</param>
         public ActionCommand(Action<object> execute, Func<object, bool> canExecute)
             : this(execute)

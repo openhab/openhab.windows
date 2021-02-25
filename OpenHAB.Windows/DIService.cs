@@ -8,6 +8,7 @@ using NLog.Layouts;
 using NLog.Targets;
 using OpenHAB.Core.Common;
 using OpenHAB.Core.Contracts.Services;
+using OpenHAB.Core.Model;
 using OpenHAB.Core.SDK;
 using OpenHAB.Core.Services;
 using OpenHAB.Windows.ViewModel;
@@ -48,8 +49,19 @@ namespace OpenHAB.Windows.Services
             _services.AddSingleton(Messenger.Default);
             _services.AddSingleton<IOpenHAB, OpenHABClient>();
             _services.AddSingleton<ISettingsService, SettingsService>();
+            _services.AddTransient<Settings>(x =>
+            {
+                ISettingsService settingsService = x.GetService<ISettingsService>();
+                return settingsService.Load();
+            });
+
             _services.AddSingleton<INavigationService, NavigationService>();
             _services.AddSingleton<OpenHABHttpClient>();
+            _services.AddSingleton<IIconCaching, IconCaching>();
+            _services.AddSingleton<IAppManager, AppManager>();
+            _services.AddSingleton<IItemManager, ItemManager>();
+            _services.AddSingleton<INotificationManager, NotificationManager>();
+            _services.AddSingleton<IOpenHABEventParser, OpenHABEventParser>();
         }
 
         private void RegisterViewModels()

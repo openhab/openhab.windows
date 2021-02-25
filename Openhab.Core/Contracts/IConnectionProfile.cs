@@ -2,7 +2,7 @@
 
 namespace OpenHAB.Core.Contracts
 {
-    /// <summary>Interface for connection profiles</summary>
+    /// <summary>Interface for connection profiles.</summary>
     public interface IConnectionProfile
     {
         /// <summary>Gets a value indicating whether [host URL] value can be modified.</summary>
@@ -22,7 +22,8 @@ namespace OpenHAB.Core.Contracts
         }
 
         /// <summary>Gets a value indicating whether [allow ignore SSL hostname] issue option is available.</summary>
-        /// <c>true.</c> if [allow ignore SSL hostname] can be enabled; otherwise, <c>false.</c></value>
+        /// <value>
+        /// <c>true.</c> if [allow ignore SSL hostname] can be enabled; otherwise, <c>false</c>.</value>
         bool AllowIgnoreSSLHostname
         {
             get;

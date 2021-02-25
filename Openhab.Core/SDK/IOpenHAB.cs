@@ -19,6 +19,13 @@ namespace OpenHAB.Core.SDK
         Task<OpenHABVersion> GetOpenHABVersion();
 
         /// <summary>
+        /// Gets the openHAB item by name from Server.
+        /// </summary>
+        /// <param name="itemName">Name of the item.</param>
+        /// <returns>openHab item object. </returns>
+        Task<OpenHABItem> GetItemByName(string itemName);
+
+        /// <summary>
         /// Loads all the sitemaps.
         /// </summary>
         /// <param name="version">The version of OpenHAB running on the server.</param>
