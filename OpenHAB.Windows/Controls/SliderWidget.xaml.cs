@@ -42,6 +42,7 @@ namespace OpenHAB.Windows.Controls
                 maxval = 100;
                 minval = 0;
             }
+
             if (Widget.Item.GetStateAsDoubleValue() <= minval)
             {
                 Widget.Item.UpdateValue(maxval);
@@ -50,6 +51,7 @@ namespace OpenHAB.Windows.Controls
             {
                 Widget.Item.UpdateValue(minval);
             }
+
             RaisePropertyChanged(nameof(Widget));
         }
 

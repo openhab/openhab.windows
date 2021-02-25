@@ -31,10 +31,9 @@
 					Value="18" />
 		</Style>
 
-				<!-- Navigation View Styling -->
+		<!-- Navigation View Styling -->
 		<SolidColorBrush x:Key="NavigationViewDefaultPaneBackground"
 						 Color="{StaticResource DarkColor}" />
-
 		<SolidColorBrush x:Key="NavigationViewExpandedPaneBackground"
 						 Color="{StaticResource DarkColor}" />
 
@@ -44,24 +43,26 @@
 						 Color="#FFFF5722" />
 		<SolidColorBrush x:Key="NavigationViewItemForegroundPressed"
 						 Color="White" />
+
 		<SolidColorBrush x:Key="NavigationViewItemForegroundChecked"
 						 Color="#FFFF5722" />
-
+		<SolidColorBrush x:Key="NavigationViewItemForegroundCheckedPressed"
+						 Color="#FFFF5722" />
 		<SolidColorBrush x:Key="NavigationViewItemForegroundCheckedPointerOver"
 						 Color="White" />
+
 		<SolidColorBrush x:Key="NavigationViewItemForegroundSelected"
 						 Color="#FFFF5722" />
-		<SolidColorBrush x:Key="NavigationViewItemForegroundSelectedPointerOver"
-						Color="White" />
 		<SolidColorBrush x:Key="NavigationViewItemForegroundSelectedPressed"
 						 Color="#FFFF5722" />
+		<SolidColorBrush x:Key="NavigationViewItemForegroundSelectedPointerOver"
+						 Color="White" />
 
 		<SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground"
 						 Color="#FFFF5722" />
 
 		<!-- Converters -->
 		<converters:ObjectToSitemapConverter x:Key="ObjectToSitemapConverter" />
-		<converters:BoolToBackgroundColorConverter x:Key="BoolToBackgroundColorConverter" />
 		<converters:ZeroToVisibilityConverter x:Key="ZeroToVisibility" />
 		<converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
@@ -69,7 +70,7 @@
 			<converters:MenuItemTemplateSelector.DefaultItemTemlate>
 				<DataTemplate x:DataType="muxc:NavigationViewItem">
 					<muxc:NavigationViewItem  Content="{x:Bind Content}"
-											 Icon="{x:Bind Icon}">
+											  Icon="{x:Bind Icon}">
 					</muxc:NavigationViewItem>
 				</DataTemplate>
 			</converters:MenuItemTemplateSelector.DefaultItemTemlate>
@@ -106,10 +107,10 @@
 						   FontSize="36"
 						   Foreground="White"
 						   Text="{Binding }" />
-				<Button Command="{Binding Vm.RefreshCommand, ElementName=Page}">
+				<Button Command="{Binding Vm.ReloadSitemapCommand, ElementName=Page}">
 					<SymbolIcon Symbol="Refresh"
 								Foreground="White"
-								VerticalAlignment="Center"/>
+								VerticalAlignment="Center" />
 				</Button>
 			</StackPanel>
 		</DataTemplate>
@@ -125,7 +126,7 @@
 						   Foreground="White" />
 			</StackPanel>
 		</DataTemplate>
-	
+
 	</Page.Resources>
 
 	<Grid>
@@ -151,12 +152,27 @@
 			<muxc:NavigationView.PaneCustomContent>
 				<StackPanel Orientation="Vertical"
 							Visibility="{Binding IsPaneOpen, ElementName=SitemapNavigation}">
-					<TextBlock x:Name="textBlock"
-							   Margin="5,0,0,10"
-							   VerticalAlignment="Center"
-							   Style="{StaticResource MenuSubHeader}"
-							   Foreground="{StaticResource OpenHABMenuColor}"
-							   Text="Sitemaps" />
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="75*" />
+							<ColumnDefinition Width="25*" />
+						</Grid.ColumnDefinitions>
+						<TextBlock x:Name="textBlock"
+								   Grid.Column="0"
+								   Margin="5,-3,0,0"
+								   VerticalAlignment="Center"
+								   Style="{StaticResource MenuSubHeader}"
+								   Foreground="{StaticResource OpenHABMenuColor}"
+								   Text="Sitemaps" />
+						<Button Grid.Column="1"
+								Margin="0,0,10,0"
+								HorizontalAlignment="Right"
+								Command="{Binding Vm.RefreshCommand, ElementName=Page}">
+							<SymbolIcon Symbol="Refresh"
+										Foreground="White"
+										VerticalAlignment="Center" />
+						</Button>
+					</Grid>
 					<TextBlock Grid.Row="1"
 							   Margin="10,10,10,0"
 							   x:Uid="NoItemsOrOpenHabNotAvailable"

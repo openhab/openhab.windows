@@ -1,40 +1,42 @@
 ﻿<local:WidgetBase x:Class="OpenHAB.Windows.Controls.ImageWidget"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:local="using:OpenHAB.Windows.Controls"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  d:DesignHeight="300"
-                  d:DesignWidth="400"
-                  mc:Ignorable="d">
+				  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				  xmlns:local="using:OpenHAB.Windows.Controls"
+				  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				  d:DesignHeight="300"
+				  d:DesignWidth="400"
+				  mc:Ignorable="d"
+				  Visibility="{x:Bind Widget.Visibility, Converter={StaticResource BooleanToVisibilityConverter}}">
 
 	<Grid Style="{StaticResource Widget}"
 		  Tapped="ImageWidget_OnTapped">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <local:ImageLabel Grid.Column="0"
-                          IconPath="{x:Bind Widget, Mode=OneWay, Converter={StaticResource IconToPathConverter}}"
-                          LabelText="{x:Bind Widget.Label, Mode=OneWay}" />
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<local:ImageLabel Grid.Column="0"
+						  IconPath="{x:Bind Widget, Mode=OneWay, Converter={StaticResource IconToPathConverter}}"
+						  LabelText="{x:Bind Widget.Label, Mode=OneWay}"
+						  LabelForeground="{x:Bind Widget.LabelColor,Converter={StaticResource StringToColorConverter}}"/>
 
-        <ContentDialog x:Name="PopupDialog"
-                       Title="{x:Bind Widget.Label}"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       Background="{StaticResource OpenHABLightColor}"
-                       IsPrimaryButtonEnabled="True"
-                       PrimaryButtonText="Close">
-            <Image x:Name="FullImage"
-                   HorizontalAlignment="Right"
-                   Stretch="Uniform" />
-        </ContentDialog>
+		<ContentDialog x:Name="PopupDialog"
+					   Title="{x:Bind Widget.Label}"
+					   Grid.Column="0"
+					   Grid.ColumnSpan="2"
+					   Background="{StaticResource OpenHABLightColor}"
+					   IsPrimaryButtonEnabled="True"
+					   PrimaryButtonText="Close">
+			<Image x:Name="FullImage"
+				   HorizontalAlignment="Right"
+				   Stretch="Uniform" />
+		</ContentDialog>
 
-        <Image x:Name="ThumbImage"
-               Grid.Column="1"
-               Margin="8"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch"
-               Stretch="UniformToFill" />
-    </Grid>
+		<Image x:Name="ThumbImage"
+			   Grid.Column="1"
+			   Margin="8"
+			   HorizontalAlignment="Stretch"
+			   VerticalAlignment="Stretch"
+			   Stretch="UniformToFill" />
+	</Grid>
 </local:WidgetBase>

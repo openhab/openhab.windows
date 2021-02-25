@@ -9,25 +9,30 @@
 				  d:DesignHeight="300"
 				  d:DesignWidth="400"
 				  VariableSizedWrapGrid.ColumnSpan="2"
-				  mc:Ignorable="d">
+				  mc:Ignorable="d"
+				  Visibility="{x:Bind Widget.Visibility, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-	<Grid Style="{StaticResource Widget}">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
+    <Grid Style="{StaticResource Widget}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-		<local:ImageLabel VerticalAlignment="Center"
+        <local:ImageLabel VerticalAlignment="Center"
 						  IconPath="{x:Bind Widget, Converter={StaticResource IconToPathConverter}, Mode=OneWay}"
-						  LabelText="{x:Bind Widget.Label, Mode=OneWay}" />
+						  LabelText="{x:Bind Widget.Label, Mode=OneWay}"
+						  LabelForeground="{x:Bind Widget.LabelColor,Converter={StaticResource StringToColorConverter}}"/>
 
-		<local:ColorMap Grid.Column="1"
-						Width="80"
-						Height="80"
-						Margin="8"
-						HorizontalAlignment="Right"
-						VerticalAlignment="Center"
-						ColorChanged="ColorMap_OnColorChanged"
-						Color="{x:Bind SelectedColor, Mode=TwoWay}" />
-	</Grid>
+        <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Slider Grid.Column="0" x:Name="BrightnessSlider" Orientation="Vertical" Margin="5,10" Minimum="0" Maximum="100" ValueChanged="BrightnessSlider_ValueChanged" UseSystemFocusVisuals="False"/>
+            <Viewbox Grid.Column="1"  MaxHeight="80" Stretch="Fill" >
+                <ColorPicker Name="ClrPicker" IsColorChannelTextInputVisible="False"  ColorSpectrumShape="Ring" IsColorPreviewVisible="False" IsHexInputVisible="False" IsColorSliderVisible="false" Color="{x:Bind SelectedColor, Mode=TwoWay}" >
+                </ColorPicker>
+            </Viewbox>
+        </Grid>
+    </Grid>
 </local:WidgetBase>

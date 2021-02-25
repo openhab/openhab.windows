@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenHAB.Core.Model;
 using Windows.UI.Xaml.Data;
 
 namespace OpenHAB.Windows.Converters
@@ -11,7 +12,12 @@ namespace OpenHAB.Windows.Converters
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.ToString().ToLower() == "true";
+            if (value == null)
+            {
+                return false;
+            }
+
+            return string.CompareOrdinal(value.ToString(), OpenHABCommands.OnCommand) == 0;
         }
 
         /// <inheritdoc/>

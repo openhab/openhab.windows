@@ -29,9 +29,9 @@ namespace OpenHAB.Windows.Controls
         private void SelectionWidget_Loaded(object sender, global::Windows.UI.Xaml.RoutedEventArgs e)
         {
             selectionMappings = new System.Collections.Generic.List<SelectionMapping>();
-            if (Widget?.Item.commandDescription?.CommandOptions?.Count > 0)
+            if (Widget?.Item.CommandDescription?.CommandOptions?.Count > 0)
             {
-                foreach (OpenHABCommandOptions option in Widget.Item.commandDescription.CommandOptions)
+                foreach (OpenHABCommandOptions option in Widget.Item.CommandDescription.CommandOptions)
                 {
                     SelectionMapping mapping = new SelectionMapping(option.Command, option.Label);
                     selectionMappings.Add(mapping);
@@ -58,7 +58,7 @@ namespace OpenHAB.Windows.Controls
             {
                 SelectionMapping currentSelection = SelectionComboBox.SelectedItem as SelectionMapping;
 
-                if (string.CompareOrdinal(currentSelection?.Command, itemState.Command) != 0)
+                if (currentSelection != null && string.CompareOrdinal(currentSelection?.Command, itemState?.Command) != 0)
                 {
                     SelectionComboBox.SelectedItem = itemState;
                 }
@@ -100,6 +100,9 @@ namespace OpenHAB.Windows.Controls
                 get; set;
             }
 
+            /// <summary>Initializes a new instance of the <see cref="SelectionMapping" /> class.</summary>
+            /// <param name="command">The command.</param>
+            /// <param name="label">The label.</param>
             public SelectionMapping(string command, string label)
             {
                 Command = command;

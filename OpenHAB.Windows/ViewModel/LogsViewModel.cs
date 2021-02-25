@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,7 +14,6 @@ namespace OpenHAB.Windows.ViewModel
     /// <summary>
     /// ViewModel for application logs.
     /// </summary>
-    /// <seealso cref="ViewModelBase{object}" />
     public class LogsViewModel : ViewModelBase<object>, IDisposable
     {
         private StorageFile _logFile;
@@ -140,7 +138,10 @@ namespace OpenHAB.Windows.ViewModel
         private bool disposedValue = false; // To detect redundant calls
         private StorageFolder _logFolder;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

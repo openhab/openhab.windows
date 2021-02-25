@@ -3,23 +3,20 @@
 namespace OpenHAB.Core.Model
 {
     /// <summary>
-    /// A mapping for an OpenHAB Widget
+    /// A mapping for an OpenHAB Widget.
     /// </summary>
     public class OpenHABCommandDescription
     {
         /// <summary>
-        /// Gets or sets the CommandOptions
+        /// Gets or sets the CommandOptions.
         /// </summary>
         public ICollection<OpenHABCommandOptions> CommandOptions { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OpenHABWidgetMapping"/> class.
-        /// </summary>
-        /// <param name="command">A command</param>
-        /// <param name="label">A label</param>
-        public OpenHABCommandDescription(ICollection<OpenHABCommandOptions> commandoptions)
+        /// <summary>Initializes a new instance of the <see cref="OpenHABCommandDescription" /> class.</summary>
+        /// <param name="commandOptions">The command options.</param>
+        public OpenHABCommandDescription(ICollection<OpenHABCommandOptions> commandOptions)
         {
-            CommandOptions = commandoptions;
+            CommandOptions = commandOptions;
         }
     }
 }

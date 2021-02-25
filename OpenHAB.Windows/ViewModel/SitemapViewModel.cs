@@ -36,7 +36,7 @@ namespace OpenHAB.Windows.ViewModel
         }
 
         /// <summary>
-        /// Gets or sets the name of the OpenHAB sitemap.
+        /// Gets the name of the OpenHAB sitemap.
         /// </summary>
         public string Name
         {
@@ -47,7 +47,7 @@ namespace OpenHAB.Windows.ViewModel
         }
 
         /// <summary>
-        /// Gets or sets the label of the OpenHAB sitemap.
+        /// Gets the label of the OpenHAB sitemap.
         /// </summary>
         public string Label
         {
@@ -81,6 +81,8 @@ namespace OpenHAB.Windows.ViewModel
 
         public async Task LoadWidgets(OpenHABVersion version)
         {
+            Widgets.Clear();
+
             ICollection<OpenHABWidget> widgetModels = await _openHabsdk.LoadItemsFromSitemap(Model, version).ConfigureAwait(false);
             widgetModels.ToList().ForEach(x => Widgets.Add(x));
         }

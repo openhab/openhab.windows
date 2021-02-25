@@ -5,6 +5,7 @@ using OpenHAB.Core.Model;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace OpenHAB.Windows.Controls
 {
@@ -17,7 +18,7 @@ namespace OpenHAB.Windows.Controls
         /// A bindable property to bind the OpenHAB widget to the control.
         /// </summary>
         public static readonly DependencyProperty WidgetProperty = DependencyProperty.Register(
-            nameof(Widget), typeof(OpenHABWidget), typeof(WidgetBase), new PropertyMetadata(default(OpenHABWidget), PropertyChangedCallback));
+            nameof(Widget), typeof(OpenHABWidget), typeof(WidgetBase), new PropertyMetadata(default(OpenHABWidget), CommonPropertyChangedCallback));
 
         /// <summary>
         /// Gets or sets the OpenHAB widget.
@@ -28,7 +29,7 @@ namespace OpenHAB.Windows.Controls
             set => SetValue(WidgetProperty, value);
         }
 
-        private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        private static void CommonPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             var widgetBase = dependencyObject as WidgetBase;
             widgetBase?.SetPropertyChangedHandler();

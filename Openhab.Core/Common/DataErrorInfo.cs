@@ -58,7 +58,7 @@ namespace OpenHAB.Core.Common
         /// <param name = "error">The error.</param>
         public void RemoveError(string propertyName, string error)
         {
-            if (_errors.ContainsKey(propertyName) &&  _errors[propertyName].Contains(error))
+            if (_errors.ContainsKey(propertyName) && _errors[propertyName].Contains(error))
             {
                 _errors[propertyName].Remove(error);
 

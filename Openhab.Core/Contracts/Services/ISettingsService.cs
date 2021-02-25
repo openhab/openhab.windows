@@ -16,7 +16,7 @@ namespace OpenHAB.Core.Contracts.Services
         /// Persists the current settings.
         /// </summary>
         /// <param name="settings">Current settings.</param>
-        void Save(Settings settings);
+        bool Save(Settings settings);
 
         /// <summary>
         /// Load the settings.

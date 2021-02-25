@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -18,10 +17,27 @@ namespace OpenHAB.Core.Model
         private string _state;
         private string _type;
 
+        /// <summary>Gets or sets the item category.</summary>
+        /// <value>The category.</value>
+        public string Category
+        {
+            get; set;
+        }
+
+        /// <summary>Gets or sets the item label with the display name.</summary>
+        /// <value>The item label.</value>
+        public string Label
+        {
+            get; set;
+        }
+
         /// <summary>
         /// Gets or sets the name of the OpenHAB item.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the type of the OpenHAB item.
@@ -50,7 +66,10 @@ namespace OpenHAB.Core.Model
         /// <summary>
         /// Gets or sets the grouptype of the OpenHAB item.
         /// </summary>
-        public string GroupType { get; set; }
+        public string GroupType
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the state of the OpenHAB item.
@@ -76,18 +95,27 @@ namespace OpenHAB.Core.Model
         /// <summary>
         /// Gets or sets the link of the OpenHAB item.
         /// </summary>
-        public string Unit { get; set; }
+        public string Unit
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the unit of the OpenHAB item.
         /// </summary>
-        public string Link { get; set; }
+        public string Link
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Gets or sets the CommandDescription of the OpenHAB item.
         /// </summary>
         ///
-        public OpenHABCommandDescription commandDescription { get; set; }
+        public OpenHABCommandDescription CommandDescription
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenHABItem"/> class.
@@ -131,7 +159,7 @@ namespace OpenHAB.Core.Model
             GroupType = item.GroupType;
             State = item.State;
             Link = item.Link;
-            commandDescription = item.commandDescription;
+            CommandDescription = item.CommandDescription;
         }
 
         private void ParseNode(XElement startNode)
@@ -148,7 +176,9 @@ namespace OpenHAB.Core.Model
             Link = startNode.Element("link")?.Value;
         }
 
-        public void UpdateValue (object value)
+        /// <summary>Sned update message to all subscriber.</summary>
+        /// <param name="value">The value.</param>
+        public void UpdateValue(object value)
         {
             if (value != null)
             {
@@ -158,11 +188,13 @@ namespace OpenHAB.Core.Model
             }
         }
 
+        /// <summary>Convert state to double value.</summary>
+        /// <returns>State as double value.</returns>
         public double GetStateAsDoubleValue()
         {
             string newstate = Regex.Replace(_state, "[^0-9,.]", string.Empty);
             double value = 0;
-            _ = double.TryParse(newstate, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out value);
+            double.TryParse(newstate, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out value);
 
             return value;
         }

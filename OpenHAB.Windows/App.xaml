@@ -13,6 +13,8 @@
 
 			<converters:StateToBoolConverter x:Key="StateToBoolConverter" />
 			<converters:IconToPathConverter x:Key="IconToPathConverter" />
+			<converters:StringToColorBrushConverter x:Key="StringToColorConverter" />
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
 			<DataTemplate x:Key="FrameTemplate">
 				<controls:FrameWidget Widget="{Binding Mode=OneWay}" />
@@ -35,7 +37,7 @@
 			</DataTemplate>
 
 			<DataTemplate x:Key="SwitchTemplate">
-				<controls:SwitchWidget Widget="{Binding Mode=OneWay}" />
+				<controls:ToggleWidget Widget="{Binding Mode=OneWay}" />
 			</DataTemplate>
 
 			<DataTemplate x:Key="MapViewTemplate">

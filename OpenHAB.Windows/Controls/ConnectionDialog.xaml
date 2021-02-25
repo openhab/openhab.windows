@@ -89,7 +89,7 @@
 						  VerticalAlignment="Top"
 						  FontSize="32"
 						  FontFamily="{StaticResource SymbolThemeFontFamily}"
-						  Glyph="{Binding UrlState, Converter={StaticResource OpenHabUrlStateToGlyph}, Mode=TwoWay}" />
+						  Glyph="{Binding State, Converter={StaticResource OpenHabUrlStateToGlyph}, Mode=TwoWay}" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>

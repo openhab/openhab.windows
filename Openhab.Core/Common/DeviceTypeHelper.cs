@@ -8,13 +8,19 @@ using Windows.UI.ViewManagement;
 
 namespace OpenHAB.Core.Common
 {
-    public static class DeviceTypeHelper
+    /// <summary>Helper class to get the target platform the app is running on.</summary>
+    public class DeviceTypeHelper
     {
+        /// <summary>
+        /// Initializes static members of the <see cref="DeviceTypeHelper"/> class.
+        /// </summary>
         static DeviceTypeHelper()
         {
             DeviceFamily = RecognizeDeviceFamily(Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily);
         }
 
+        /// <summary>Gets the device family.</summary>
+        /// <value>The device family.</value>
         public static DeviceFamily DeviceFamily
         {
             get;

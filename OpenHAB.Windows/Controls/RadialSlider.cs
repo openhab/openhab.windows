@@ -285,7 +285,8 @@ namespace OpenHAB.Windows.Controls
         /// <summary>
         /// Gets or sets the Minimum value for the Widget.
         /// </summary>
-        public double Minimum {
+        public double Minimum
+        {
             get { return (double)GetValue(MinimumProperty); }
             set { SetValue(MinimumProperty, value); }
         }
@@ -293,7 +294,8 @@ namespace OpenHAB.Windows.Controls
         /// <summary>
         /// Gets or sets the Maximum value for the Widget.
         /// </summary>
-        public double Maximum {
+        public double Maximum
+        {
             get { return (double)GetValue(MaximumProperty); }
             set { SetValue(MaximumProperty, value); }
         }
@@ -527,7 +529,7 @@ namespace OpenHAB.Windows.Controls
                 divider = 360;
             }
 
-            var value = Minimum + ((Maximum - Minimum) * (Mod(angle - NormalizedMinAngle, 360)) / divider);
+            var value = Minimum + ((Maximum - Minimum) * Mod(angle - NormalizedMinAngle, 360) / divider);
             if (value < Minimum || value > Maximum)
             {
                 // Ignore positions outside the scale angle.
@@ -549,6 +551,7 @@ namespace OpenHAB.Windows.Controls
                 Minimum = 0;
                 Maximum = 100;
             }
+
             // Off-scale on the left.
             if (value < Minimum)
             {

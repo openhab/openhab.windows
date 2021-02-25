@@ -6,7 +6,8 @@
 				  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				  d:DesignHeight="150"
 				  d:DesignWidth="300"
-				  mc:Ignorable="d">
+				  mc:Ignorable="d"
+				  Visibility="{x:Bind Widget.Visibility, Converter={StaticResource BooleanToVisibilityConverter}}">
 
 	<Grid Style="{StaticResource Widget}">
 		<Grid.ColumnDefinitions>
@@ -15,7 +16,8 @@
 		</Grid.ColumnDefinitions>
 		<local:ImageLabel VerticalAlignment="Center"
 						  IconPath="{x:Bind Widget, Converter={StaticResource IconToPathConverter}, Mode=OneWay}"
-						  LabelText="{x:Bind Widget.Label, Mode=OneWay}" />
+						  LabelText="{x:Bind Widget.Label, Mode=OneWay}"
+						  LabelForeground="{x:Bind Widget.LabelColor,Converter={StaticResource StringToColorConverter}}"/>
 
 		<StackPanel Grid.Column="1"
 					Width="100"

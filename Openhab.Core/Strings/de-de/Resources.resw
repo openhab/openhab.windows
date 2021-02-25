@@ -263,7 +263,46 @@ Bitte wählen Sie den Demo Modus oder die Lokalen/Remote Verbindunsinformation z
   <data name="ShowDefaultSitemap.Text" xml:space="preserve">
     <value>Standard Sitemaps einblenden</value>
   </data>
+  <data name="SVGIcons.Text" xml:space="preserve">
+    <value>Verwenden von Icons mit hoher Auflösung für Sitemapkacheln</value>
+  </data>
+  <data name="ClearIconCache.Text" xml:space="preserve">
+    <value>Lokaler Zwischenspeicher für Icons löschen</value>
+  </data>
+  <data name="ClearIconCacheButton.Content" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="AppAutostart.Text" xml:space="preserve">
+    <value>Start app wenn das System startet</value>
+  </data>
+  <data name="SitemapSetting.Text" xml:space="preserve">
+    <value>Sitemap</value>
+  </data>
+  <data name="StartAppMinimized.Text" xml:space="preserve">
+    <value>Starte app minimiert</value>
+  </data>
+  <data name="NotificationTile" xml:space="preserve">
+    <value>Änderte sich von {0} zu {1}</value>
+  </data>
+  <data name="NotificationTileSimple" xml:space="preserve">
+    <value>Zustand ist {1}</value>
+  </data>
+  <data name="NotificationToast" xml:space="preserve">
+    <value>{0} änderte sich von {1} zu {2}</value>
+  </data>
+  <data name="NotificationToastSimple" xml:space="preserve">
+    <value>{0}: Zustand ist {1}</value>
+  </data>
   <data name="InfoAppBarSettingsButton.Content" xml:space="preserve">
     <value>Einstellungen</value>
+  </data>
+  <data name="EnableWindowsNotifications.Text" xml:space="preserve">
+    <value>Einschlaten der Benachrichtigung für openHAB Events.</value>
+  </data>
+  <data name="Et" xml:space="preserve">
+    <value />
+  </data>
+  <data name="NotificationSetting.Text" xml:space="preserve">
+    <value>Benachrichtigungen</value>
   </data>
 </root>

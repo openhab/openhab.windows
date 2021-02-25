@@ -6,7 +6,8 @@ The app is currently under heavy development and far from MVP status.
 
 ## Builds
 
-[![Build status](https://github.com/openhab/openhab-windows/workflows/CI/badge.svg)](https://github.com/openhab/openhab-windows/actions)
+[![CI Build status](https://github.com/openhab/openhab-windows/workflows/CI/badge.svg)](https://github.com/openhab/openhab-windows/actions?query=workflow%3A%22CI+Build%22)
+[![Latest App Release Build](https://github.com/openhab/openhab-windows/workflows/App%20Release/badge.svg)](https://github.com/openhab/openhab-windows/actions?query=workflow%3A%22App+Release%22)
 
 
 ## Setting up development environment

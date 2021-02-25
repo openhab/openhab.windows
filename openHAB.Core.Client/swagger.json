@@ -1,0 +1,4034 @@
+{
+  "swagger": "2.0",
+  "info": { "title": "openHAB REST API", "version": "2.5.8" },
+  "basePath": "/rest",
+  "tags": [
+    { "name": "rules" },
+    { "name": "audio" },
+    { "name": "config-descriptions" },
+    { "name": "uuid" },
+    { "name": "services" },
+    { "name": "voice" },
+    { "name": "templates" },
+    { "name": "profile-types" },
+    { "name": "sitemaps" },
+    { "name": "channel-types" },
+    { "name": "extensions" },
+    { "name": "habpanel" },
+    { "name": "persistence" },
+    { "name": "module-types" },
+    { "name": "things" },
+    { "name": "inbox" },
+    { "name": "discovery" },
+    { "name": "bindings" },
+    { "name": "links" },
+    { "name": "items" },
+    { "name": "thing-types" }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "getRoot",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": { "default": { "description": "successful operation" } }
+      }
+    },
+    "/audio/defaultsink": {
+      "get": {
+        "tags": [ "audio" ],
+        "summary": "Get the default sink if defined or the first available sink.",
+        "description": "",
+        "operationId": "getAudioDefaultSink",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Sink not found" }
+        }
+      }
+    },
+    "/audio/defaultsource": {
+      "get": {
+        "tags": [ "audio" ],
+        "summary": "Get the default source if defined or the first available source.",
+        "description": "",
+        "operationId": "getAudioDefaultSource",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Source not found" }
+        }
+      }
+    },
+    "/audio/sinks": {
+      "get": {
+        "tags": [ "audio" ],
+        "summary": "Get the list of all sinks.",
+        "description": "",
+        "operationId": "getAudioSinks",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/audio/sources": {
+      "get": {
+        "tags": [ "audio" ],
+        "summary": "Get the list of all sources.",
+        "description": "",
+        "operationId": "getAudioSources",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/bindings": {
+      "get": {
+        "tags": [ "bindings" ],
+        "summary": "Get all bindings.",
+        "description": "",
+        "operationId": "getAllBindings",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/BindingInfoDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/bindings/{bindingId}/config": {
+      "get": {
+        "tags": [ "bindings" ],
+        "summary": "Get binding configuration for given binding ID.",
+        "description": "",
+        "operationId": "getBindingConfigurationByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "bindingId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "500": { "description": "Configuration can not be read due to internal error" },
+          "404": { "description": "Binding does not exist" }
+        }
+      },
+      "put": {
+        "tags": [ "bindings" ],
+        "summary": "Updates a binding configuration for given binding ID and returns the old configuration.",
+        "description": "",
+        "operationId": "updateBindingConfiguration",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "bindingId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "object" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "500": { "description": "Configuration can not be updated due to internal error" },
+          "204": { "description": "No old configuration" },
+          "404": { "description": "Binding does not exist" }
+        }
+      }
+    },
+    "/channel-types": {
+      "get": {
+        "tags": [ "channel-types" ],
+        "summary": "Gets all available channel types.",
+        "description": "",
+        "operationId": "getAllChannelTypes",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/ChannelTypeDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/channel-types/{channelTypeUID}": {
+      "get": {
+        "tags": [ "channel-types" ],
+        "summary": "Gets channel type by UID.",
+        "description": "",
+        "operationId": "getChannelTypeByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "channelTypeUID",
+            "in": "path",
+            "description": "channelTypeUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Channel type with provided channelTypeUID does not exist.",
+            "schema": { "$ref": "#/definitions/ChannelTypeDTO" }
+          },
+          "404": { "description": "No content" }
+        }
+      }
+    },
+    "/channel-types/{channelTypeUID}/linkableItemTypes": {
+      "get": {
+        "tags": [ "channel-types" ],
+        "summary": "Gets the item types the given trigger channel type UID can be linked to.",
+        "description": "",
+        "operationId": "getLinkableItemTypesByChannelTypeUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "channelTypeUID",
+            "in": "path",
+            "description": "channelTypeUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            }
+          },
+          "204": { "description": "No content: channel type has no linkable items or is no trigger channel." },
+          "404": { "description": "Given channel type UID not found." }
+        }
+      }
+    },
+    "/config-descriptions": {
+      "get": {
+        "tags": [ "config-descriptions" ],
+        "summary": "Gets all available config descriptions.",
+        "description": "",
+        "operationId": "getAllConfigDescriptions",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "scheme",
+            "in": "query",
+            "description": "scheme filter",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ConfigDescriptionDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/config-descriptions/{uri}": {
+      "get": {
+        "tags": [ "config-descriptions" ],
+        "summary": "Gets a config description by URI.",
+        "description": "",
+        "operationId": "getConfigDescriptionByURI",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "in": "path",
+            "description": "uri",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ConfigDescriptionDTO" }
+          },
+          "400": { "description": "Invalid URI syntax" },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/discovery": {
+      "get": {
+        "tags": [ "discovery" ],
+        "summary": "Gets all bindings that support discovery.",
+        "description": "",
+        "operationId": "getDiscoveryServices",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "/discovery/bindings/{bindingId}/scan": {
+      "post": {
+        "tags": [ "discovery" ],
+        "summary": "Starts asynchronous discovery process for a binding and returns the timeout in seconds of the discovery operation.",
+        "description": "",
+        "operationId": "scan",
+        "produces": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "bindingId",
+            "in": "path",
+            "description": "bindingId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "/extensions": {
+      "get": {
+        "tags": [ "extensions" ],
+        "summary": "Get all extensions.",
+        "description": "",
+        "operationId": "getExtensions",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          }
+        }
+      }
+    },
+    "/extensions/types": {
+      "get": {
+        "tags": [ "extensions" ],
+        "summary": "Get all extension types.",
+        "description": "",
+        "operationId": "getExtensionTypes",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          }
+        }
+      }
+    },
+    "/extensions/url/{url}/install": {
+      "post": {
+        "tags": [ "extensions" ],
+        "summary": "Installs the extension from the given URL.",
+        "description": "",
+        "operationId": "installExtensionByURL",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "path",
+            "description": "extension install URL",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "The given URL is malformed or not valid." }
+        }
+      }
+    },
+    "/extensions/{extensionId}": {
+      "get": {
+        "tags": [ "extensions" ],
+        "summary": "Get extension with given ID.",
+        "description": "",
+        "operationId": "getExtensionById",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "extensionId",
+            "in": "path",
+            "description": "extension ID",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9-]+"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/extensions/{extensionId}/install": {
+      "post": {
+        "tags": [ "extensions" ],
+        "summary": "Installs the extension with the given ID.",
+        "description": "",
+        "operationId": "installExtension",
+        "parameters": [
+          {
+            "name": "extensionId",
+            "in": "path",
+            "description": "extension ID",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9-:]+"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/extensions/{extensionId}/uninstall": {
+      "post": {
+        "tags": [ "extensions" ],
+        "operationId": "uninstallExtension",
+        "parameters": [
+          {
+            "name": "extensionId",
+            "in": "path",
+            "description": "extension ID",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9-:]+"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/habpanel/gallery/{galleryName}/widgets": {
+      "get": {
+        "tags": [ "habpanel" ],
+        "summary": "Gets the list of widget gallery items.",
+        "description": "",
+        "operationId": "getGalleryWidgetList",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "galleryName",
+            "in": "path",
+            "description": "gallery name e.g. 'community'",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]*"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Unknown gallery" }
+        }
+      }
+    },
+    "/habpanel/gallery/{galleryName}/widgets/{id}": {
+      "get": {
+        "tags": [ "habpanel" ],
+        "summary": "Gets the details about a widget gallery item.",
+        "description": "",
+        "operationId": "getGalleryWidgetsItem",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "galleryName",
+            "in": "path",
+            "description": "gallery name e.g. 'community'",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]*"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id within the gallery",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]*"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Unknown gallery or gallery item not found" }
+        }
+      }
+    },
+    "/iconsets": {
+      "get": {
+        "operationId": "getAllIconSets",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "default": { "description": "successful operation" } }
+      }
+    },
+    "/inbox": {
+      "get": {
+        "tags": [ "inbox" ],
+        "summary": "Get all discovered things.",
+        "description": "",
+        "operationId": "getAllDiscoveredThings",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/DiscoveryResultDTO" }
+          }
+        }
+      }
+    },
+    "/inbox/{thingUID}": {
+      "delete": {
+        "tags": [ "inbox" ],
+        "summary": "Removes the discovery result from the inbox.",
+        "description": "",
+        "operationId": "deleteThingFromInboxById",
+        "parameters": [
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Discovery result not found in the inbox." }
+        }
+      }
+    },
+    "/inbox/{thingUID}/approve": {
+      "post": {
+        "tags": [ "inbox" ],
+        "summary": "Approves the discovery result by adding the thing to the registry.",
+        "description": "",
+        "operationId": "approveDiscoveryThingById",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "thing label",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Thing unable to be approved." },
+          "409": { "description": "No binding found that supports this thing." }
+        }
+      }
+    },
+    "/inbox/{thingUID}/ignore": {
+      "post": {
+        "tags": [ "inbox" ],
+        "summary": "Flags a discovery result as ignored for further processing.",
+        "description": "",
+        "operationId": "ignoreDiscoveryThingById",
+        "parameters": [
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/inbox/{thingUID}/unignore": {
+      "post": {
+        "tags": [ "inbox" ],
+        "summary": "Removes ignore flag from a discovery result.",
+        "description": "",
+        "operationId": "unignoreDiscoveryThingById",
+        "parameters": [
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/items": {
+      "get": {
+        "tags": [ "items" ],
+        "summary": "Get all available items.",
+        "description": "",
+        "operationId": "getItems",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "item type filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "item tag filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "metadata",
+            "in": "query",
+            "description": "metadata selector",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "recursive",
+            "in": "query",
+            "description": "get member items recursively",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "limit output to the given fields (comma separated)",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/EnrichedItemDTO" }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [ "items" ],
+        "summary": "Adds a list of items to the registry or updates the existing items.",
+        "description": "",
+        "operationId": "createOrUpdateItems",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "array of item data",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/GroupItemDTO" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "400": { "description": "Item list is null." }
+        }
+      }
+    },
+    "/items/{itemName}/members/{memberItemName}": {
+      "put": {
+        "tags": [ "items" ],
+        "summary": "Adds a new member to a group item.",
+        "description": "",
+        "operationId": "addMemberToItem",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "memberItemName",
+            "in": "path",
+            "description": "member item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Item or member item not found or item is not of type group item." },
+          "405": { "description": "Member item is not editable." }
+        }
+      },
+      "delete": {
+        "tags": [ "items" ],
+        "summary": "Removes an existing member from a group item.",
+        "description": "",
+        "operationId": "removeMemberFromItem",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "memberItemName",
+            "in": "path",
+            "description": "member item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Item or member item not found or item is not of type group item." },
+          "405": { "description": "Member item is not editable." }
+        }
+      }
+    },
+    "/items/{itemname}": {
+      "get": {
+        "tags": [ "items" ],
+        "summary": "Gets a single item.",
+        "description": "",
+        "operationId": "getItemData",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "metadata",
+            "in": "query",
+            "description": "metadata selector",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/EnrichedItemDTO" }
+          },
+          "404": { "description": "Item not found" }
+        }
+      },
+      "post": {
+        "tags": [ "items" ],
+        "summary": "Sends a command to an item.",
+        "description": "",
+        "operationId": "postItemCommand",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "valid item command (e.g. ON, OFF, UP, DOWN, REFRESH)",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Item command null" },
+          "404": { "description": "Item not found" }
+        }
+      },
+      "put": {
+        "tags": [ "items" ],
+        "summary": "Adds a new item to the registry or updates the existing item.",
+        "description": "",
+        "operationId": "createOrUpdateItem",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "item data",
+            "required": true,
+            "schema": { "$ref": "#/definitions/GroupItemDTO" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "201": { "description": "Item created." },
+          "400": { "description": "Item null." },
+          "404": { "description": "Item not found." },
+          "405": { "description": "Item not editable." }
+        }
+      },
+      "delete": {
+        "tags": [ "items" ],
+        "summary": "Removes an item from the registry.",
+        "description": "",
+        "operationId": "removeItem",
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Item not found or item is not editable." }
+        }
+      }
+    },
+    "/items/{itemname}/metadata/{namespace}": {
+      "put": {
+        "tags": [ "items" ],
+        "summary": "Adds metadata to an item.",
+        "description": "",
+        "operationId": "addMetadataToItem",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "namespace",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "metadata",
+            "required": true,
+            "schema": { "$ref": "#/definitions/MetadataDTO" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Metadata value empty." },
+          "404": { "description": "Item not found." },
+          "405": { "description": "Metadata not editable." }
+        }
+      },
+      "delete": {
+        "tags": [ "items" ],
+        "summary": "Removes metadata from an item.",
+        "description": "",
+        "operationId": "removeMetadataFromItem",
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "namespace",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Item not found." },
+          "405": { "description": "Meta data not editable." }
+        }
+      }
+    },
+    "/items/{itemname}/state": {
+      "get": {
+        "tags": [ "items" ],
+        "summary": "Gets the state of an item.",
+        "description": "",
+        "operationId": "getPlainItemState",
+        "produces": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Item not found" }
+        }
+      },
+      "put": {
+        "tags": [ "items" ],
+        "summary": "Updates the state of an item.",
+        "description": "",
+        "operationId": "putItemState",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "valid item state (e.g. ON, OFF)",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" },
+          "400": { "description": "Item state null" },
+          "404": { "description": "Item not found" }
+        }
+      }
+    },
+    "/items/{itemname}/tags/{tag}": {
+      "put": {
+        "tags": [ "items" ],
+        "summary": "Adds a tag to an item.",
+        "description": "",
+        "operationId": "addTagToItem",
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "tag",
+            "in": "path",
+            "description": "tag",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Item not found." },
+          "405": { "description": "Item not editable." }
+        }
+      },
+      "delete": {
+        "tags": [ "items" ],
+        "summary": "Removes a tag from an item.",
+        "description": "",
+        "operationId": "removeTagFromItem",
+        "parameters": [
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "tag",
+            "in": "path",
+            "description": "tag",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Item not found." },
+          "405": { "description": "Item not editable." }
+        }
+      }
+    },
+    "/links": {
+      "get": {
+        "tags": [ "links" ],
+        "summary": "Gets all available links.",
+        "description": "",
+        "operationId": "getAllLinks",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ItemChannelLinkDTO" }
+          }
+        }
+      }
+    },
+    "/links/auto": {
+      "get": {
+        "tags": [ "links" ],
+        "summary": "Tells whether automatic link mode is active or not",
+        "description": "",
+        "operationId": "isLinkAutomaticModeEnabled",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "/links/{itemName}/{channelUID}": {
+      "get": {
+        "tags": [ "links" ],
+        "summary": "Retrieves links.",
+        "description": "",
+        "operationId": "getLinkByItemNameAndChannelId",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "itemName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "channelUID",
+            "in": "path",
+            "description": "channelUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Content does not match the path" }
+        }
+      },
+      "put": {
+        "tags": [ "links" ],
+        "summary": "Links item to a channel.",
+        "description": "",
+        "operationId": "linkItemToChannel",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "itemName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "channelUID",
+            "in": "path",
+            "description": "channelUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "link data",
+            "required": false,
+            "schema": { "$ref": "#/definitions/ItemChannelLinkDTO" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Content does not match the path" },
+          "405": { "description": "Link is not editable" }
+        }
+      },
+      "delete": {
+        "tags": [ "links" ],
+        "summary": "Unlinks item from a channel.",
+        "description": "",
+        "operationId": "unlinkItemFromChannel",
+        "parameters": [
+          {
+            "name": "itemName",
+            "in": "path",
+            "description": "itemName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "channelUID",
+            "in": "path",
+            "description": "channelUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Link not found." },
+          "405": { "description": "Link not editable." }
+        }
+      }
+    },
+    "/module-types": {
+      "get": {
+        "tags": [ "module-types" ],
+        "summary": "Get all available module types.",
+        "description": "",
+        "operationId": "getAllModuleTypes",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "tags for filtering",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "filtering by action, condition or trigger",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ModuleTypeDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/module-types/{moduleTypeUID}": {
+      "get": {
+        "tags": [ "module-types" ],
+        "summary": "Gets a module type corresponding to the given UID.",
+        "description": "",
+        "operationId": "getModuleTypeByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "moduleTypeUID",
+            "in": "path",
+            "description": "moduleTypeUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ModuleTypeDTO" }
+          },
+          "404": { "description": "Module Type corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/persistence": {
+      "get": {
+        "tags": [ "persistence" ],
+        "summary": "Gets a list of persistence services.",
+        "description": "",
+        "operationId": "GetPersistenceServices",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "/persistence/items": {
+      "get": {
+        "tags": [ "persistence" ],
+        "summary": "Gets a list of items available via a specific persistence service.",
+        "description": "",
+        "operationId": "GetPersistenceServiceItems",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "query",
+            "description": "Id of the persistence service. If not provided the default service will be used",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "/persistence/items/{itemname}": {
+      "get": {
+        "tags": [ "persistence" ],
+        "summary": "Gets item persistence data from the persistence service.",
+        "description": "",
+        "operationId": "GetPersistenceItemData",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "query",
+            "description": "Id of the persistence service. If not provided the default service will be used",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "The item name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "starttime",
+            "in": "query",
+            "description": "Start time of the data to return. Will default to 1 day before endtime. [yyyy-MM-dd'T'HH:mm:ss.SSSZ]",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endtime",
+            "in": "query",
+            "description": "End time of the data to return. Will default to current time. [yyyy-MM-dd'T'HH:mm:ss.SSSZ]",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of data to return. This parameter will enable paging.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pagelength",
+            "in": "query",
+            "description": "The length of each page.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "boundary",
+            "in": "query",
+            "description": "Gets one value before and after the requested period.",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ItemHistoryDTO" }
+          },
+          "404": { "description": "Unknown Item or persistence service" }
+        }
+      },
+      "put": {
+        "tags": [ "persistence" ],
+        "summary": "Stores item persistence data into the persistence service.",
+        "description": "",
+        "operationId": "InsertPersistenceItemData",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "query",
+            "description": "Id of the persistence service. If not provided the default service will be used",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "The item name.",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "time",
+            "in": "query",
+            "description": "Time of the data to be stored. Will default to current time. [yyyy-MM-dd'T'HH:mm:ss.SSSZ]",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "The state to store.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ItemHistoryDTO" }
+          },
+          "404": { "description": "Unknown Item or persistence service" }
+        }
+      },
+      "delete": {
+        "tags": [ "persistence" ],
+        "summary": "Delete item data from a specific persistence service.",
+        "description": "",
+        "operationId": "DeletePersistenceServiceItemData",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "query",
+            "description": "Id of the persistence service.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "itemname",
+            "in": "path",
+            "description": "The item name.",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "starttime",
+            "in": "query",
+            "description": "Start time of the data to return. [yyyy-MM-dd'T'HH:mm:ss.SSSZ]",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "endtime",
+            "in": "query",
+            "description": "End time of the data to return. [yyyy-MM-dd'T'HH:mm:ss.SSSZ]",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "400": { "description": "Invalid filter parameters" },
+          "404": { "description": "Unknown persistence service" }
+        }
+      }
+    },
+    "/profile-types": {
+      "get": {
+        "tags": [ "profile-types" ],
+        "summary": "Gets all available profile types.",
+        "description": "",
+        "operationId": "getAllProfileTypes",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "channelTypeUID",
+            "in": "query",
+            "description": "channel type filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "itemType",
+            "in": "query",
+            "description": "item type filter",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/ProfileTypeDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/rules": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Get available rules, optionally filtered by tags and/or prefix.",
+        "description": "",
+        "operationId": "getRules",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": { "type": "string" },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/EnrichedRuleDTO" }
+          }
+        }
+      },
+      "post": {
+        "tags": [ "rules" ],
+        "summary": "Creates a rule.",
+        "description": "",
+        "operationId": "createRule",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "rule data",
+            "required": true,
+            "schema": { "$ref": "#/definitions/RuleDTO" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Newly created Rule"
+              }
+            }
+          },
+          "400": { "description": "Creation of the rule is refused. Missing required parameter." },
+          "409": { "description": "Creation of the rule is refused. Rule with the same UID already exists." }
+        }
+      }
+    },
+    "/rules/{ruleUID}": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the rule corresponding to the given UID.",
+        "description": "",
+        "operationId": "getRuleByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/EnrichedRuleDTO" }
+          },
+          "404": { "description": "Rule not found" }
+        }
+      },
+      "put": {
+        "tags": [ "rules" ],
+        "summary": "Updates an existing rule corresponding to the given UID.",
+        "description": "",
+        "operationId": "updateRule",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "rule data",
+            "required": true,
+            "schema": { "$ref": "#/definitions/RuleDTO" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      },
+      "delete": {
+        "tags": [ "rules" ],
+        "summary": "Removes an existing rule corresponding to the given UID.",
+        "description": "",
+        "operationId": "removeRule",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/actions": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the rule actions.",
+        "description": "",
+        "operationId": "getRuleActions",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ActionDTO" }
+            }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/conditions": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the rule conditions.",
+        "description": "",
+        "operationId": "getRuleConditions",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ConditionDTO" }
+            }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/config": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the rule configuration values.",
+        "description": "",
+        "operationId": "getRuleConfiguration",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      },
+      "put": {
+        "tags": [ "rules" ],
+        "summary": "Sets the rule configuration values.",
+        "description": "",
+        "operationId": "updateRuleConfiguration",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "config",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "object" }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/enable": {
+      "post": {
+        "tags": [ "rules" ],
+        "summary": "Sets the rule enabled status.",
+        "description": "",
+        "operationId": "enableRule",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "enable",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/runnow": {
+      "post": {
+        "tags": [ "rules" ],
+        "summary": "Executes actions of the rule.",
+        "description": "",
+        "operationId": "runRuleNow",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/triggers": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the rule triggers.",
+        "description": "",
+        "operationId": "getRuleTriggers",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/TriggerDTO" }
+            }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/{moduleCategory}/{id}": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the rule's module corresponding to the given Category and ID.",
+        "description": "",
+        "operationId": "getRuleModuleById",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "moduleCategory",
+            "in": "path",
+            "description": "moduleCategory",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ModuleDTO" }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found or does not have a module with such Category and ID." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/{moduleCategory}/{id}/config": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the module's configuration.",
+        "description": "",
+        "operationId": "getRuleModuleConfig",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "moduleCategory",
+            "in": "path",
+            "description": "moduleCategory",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found or does not have a module with such Category and ID." }
+        }
+      }
+    },
+    "/rules/{ruleUID}/{moduleCategory}/{id}/config/{param}": {
+      "get": {
+        "tags": [ "rules" ],
+        "summary": "Gets the module's configuration parameter.",
+        "description": "",
+        "operationId": "getRuleModuleConfigParam",
+        "produces": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "moduleCategory",
+            "in": "path",
+            "description": "moduleCategory",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "param",
+            "in": "path",
+            "description": "param",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Rule corresponding to the given UID does not found or does not have a module with such Category and ID." }
+        }
+      },
+      "put": {
+        "tags": [ "rules" ],
+        "summary": "Sets the module's configuration parameter value.",
+        "description": "",
+        "operationId": "setRuleModuleConfigParam",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "ruleUID",
+            "in": "path",
+            "description": "ruleUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "moduleCategory",
+            "in": "path",
+            "description": "moduleCategory",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "param",
+            "in": "path",
+            "description": "param",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "value",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Rule corresponding to the given UID does not found or does not have a module with such Category and ID." }
+        }
+      }
+    },
+    "/services": {
+      "get": {
+        "tags": [ "services" ],
+        "summary": "Get all configurable services.",
+        "description": "",
+        "operationId": "getAllServices",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ConfigurableServiceDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/services/{serviceId}": {
+      "get": {
+        "tags": [ "services" ],
+        "summary": "Get configurable service for given service ID.",
+        "description": "",
+        "operationId": "getServiceById",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ConfigurableServiceDTO" }
+          },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/services/{serviceId}/config": {
+      "get": {
+        "tags": [ "services" ],
+        "summary": "Get service configuration for given service ID.",
+        "description": "",
+        "operationId": "getServiceConfiguration",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "500": { "description": "Configuration can not be read due to internal error" }
+        }
+      },
+      "put": {
+        "tags": [ "services" ],
+        "summary": "Updates a service configuration for given service ID and returns the old configuration.",
+        "description": "",
+        "operationId": "updateServiceConfiguration",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "object" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "500": { "description": "Configuration can not be updated due to internal error" },
+          "204": { "description": "No old configuration" }
+        }
+      },
+      "delete": {
+        "tags": [ "services" ],
+        "summary": "Deletes a service configuration for given service ID and returns the old configuration.",
+        "description": "",
+        "operationId": "deleteServiceConfiguration",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "500": { "description": "Configuration can not be deleted due to internal error" },
+          "204": { "description": "No old configuration" }
+        }
+      }
+    },
+    "/services/{serviceId}/contexts": {
+      "get": {
+        "tags": [ "services" ],
+        "summary": "Get existing multiple context service configurations for the given factory PID.",
+        "description": "",
+        "operationId": "getMultiConfigServicesByFactoryPid",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "description": "service ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ConfigurableServiceDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/sitemaps": {
+      "get": {
+        "tags": [ "sitemaps" ],
+        "summary": "Get all available sitemaps.",
+        "description": "",
+        "operationId": "getSitemaps",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/sitemaps/events/subscribe": {
+      "post": {
+        "tags": [ "sitemaps" ],
+        "summary": "Creates a sitemap event subscription.",
+        "description": "",
+        "operationId": "createEventSubscription",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "type": "object" }
+          },
+          "201": { "description": "Subscription created." },
+          "503": { "description": "Subscriptions limit reached." }
+        }
+      }
+    },
+    "/sitemaps/events/{subscriptionid}": {
+      "get": {
+        "tags": [ "sitemaps" ],
+        "summary": "Get sitemap events.",
+        "description": "",
+        "operationId": "getSitemapEvents",
+        "produces": [ "text/event-stream" ],
+        "parameters": [
+          {
+            "name": "subscriptionid",
+            "in": "path",
+            "description": "subscription id",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9-]+"
+          },
+          {
+            "name": "sitemap",
+            "in": "query",
+            "description": "sitemap name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageid",
+            "in": "query",
+            "description": "page id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Page not linked to the subscription." },
+          "404": { "description": "Subscription not found." }
+        }
+      }
+    },
+    "/sitemaps/{sitemapname}": {
+      "get": {
+        "tags": [ "sitemaps" ],
+        "summary": "Get sitemap by name.",
+        "description": "",
+        "operationId": "getSitemapData",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sitemapname",
+            "in": "path",
+            "description": "sitemap name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "jsoncallback",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "callback"
+          },
+          {
+            "name": "includeHidden",
+            "in": "query",
+            "description": "include hidden widgets",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/sitemaps/{sitemapname}/{pageid}": {
+      "get": {
+        "tags": [ "sitemaps" ],
+        "summary": "Polls the data for a sitemap.",
+        "description": "",
+        "operationId": "getPageDataForSitemap",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sitemapname",
+            "in": "path",
+            "description": "sitemap name",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "pageid",
+            "in": "path",
+            "description": "page id",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          },
+          {
+            "name": "subscriptionid",
+            "in": "query",
+            "description": "subscriptionid",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "includeHidden",
+            "in": "query",
+            "description": "include hidden widgets",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Invalid subscription id has been provided." },
+          "404": { "description": "Sitemap with requested name does not exist or page does not exist, or page refers to a non-linkable widget" }
+        }
+      }
+    },
+    "/templates": {
+      "get": {
+        "tags": [ "templates" ],
+        "summary": "Get all available templates.",
+        "description": "",
+        "operationId": "getAllTemplates",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Template" }
+          }
+        }
+      }
+    },
+    "/templates/{templateUID}": {
+      "get": {
+        "tags": [ "templates" ],
+        "summary": "Gets a template corresponding to the given UID.",
+        "description": "",
+        "operationId": "getTemplateByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "templateUID",
+            "in": "path",
+            "description": "templateUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Template" }
+          },
+          "404": { "description": "Template corresponding to the given UID does not found." }
+        }
+      }
+    },
+    "/thing-types": {
+      "get": {
+        "tags": [ "thing-types" ],
+        "summary": "Gets all available thing types without config description, channels and properties.",
+        "description": "",
+        "operationId": "getAllThingTypes",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/StrippedThingTypeDTO" }
+            }
+          }
+        }
+      }
+    },
+    "/thing-types/{thingTypeUID}": {
+      "get": {
+        "tags": [ "thing-types" ],
+        "summary": "Gets thing type by UID.",
+        "description": "",
+        "operationId": "getThingTypeByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "thingTypeUID",
+            "in": "path",
+            "description": "thingTypeUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thing type with provided thingTypeUID does not exist.",
+            "schema": { "$ref": "#/definitions/ThingTypeDTO" }
+          },
+          "404": { "description": "No content" }
+        }
+      }
+    },
+    "/things": {
+      "get": {
+        "tags": [ "things" ],
+        "summary": "Get all available things.",
+        "description": "",
+        "operationId": "getAllThings",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/EnrichedThingDTO" }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [ "things" ],
+        "summary": "Creates a new thing and adds it to the registry.",
+        "description": "",
+        "operationId": "createThing",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "thing data",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ThingDTO" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": { "type": "string" }
+          },
+          "400": { "description": "A uid must be provided, if no binding can create a thing of this type." },
+          "409": { "description": "A thing with the same uid already exists." }
+        }
+      }
+    },
+    "/things/{thingUID}": {
+      "get": {
+        "tags": [ "things" ],
+        "summary": "Gets thing by UID.",
+        "description": "",
+        "operationId": "getThingByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ThingDTO" }
+          },
+          "404": { "description": "Thing not found." }
+        }
+      },
+      "put": {
+        "tags": [ "things" ],
+        "summary": "Updates a thing.",
+        "description": "",
+        "operationId": "updateThing",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "thing",
+            "required": true,
+            "schema": { "$ref": "#/definitions/ThingDTO" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ThingDTO" }
+          },
+          "404": { "description": "Thing not found." },
+          "409": { "description": "Thing could not be updated as it is not editable." }
+        }
+      },
+      "delete": {
+        "tags": [ "things" ],
+        "summary": "Removes a thing from the registry. Set 'force' to __true__ if you want the thing te be removed immediately.",
+        "description": "",
+        "operationId": "removeThing",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "force",
+            "in": "query",
+            "description": "force",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK, was deleted." },
+          "202": { "description": "ACCEPTED for asynchronous deletion." },
+          "404": { "description": "Thing not found." },
+          "409": { "description": "Thing could not be deleted because it's not editable." }
+        }
+      }
+    },
+    "/things/{thingUID}/config": {
+      "put": {
+        "tags": [ "things" ],
+        "summary": "Updates thing's configuration.",
+        "description": "",
+        "operationId": "updateConfiguration",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thing",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "configuration parameters",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "object" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/ThingDTO" }
+          },
+          "400": { "description": "Configuration of the thing is not valid." },
+          "404": { "description": "Thing not found" },
+          "409": { "description": "Thing could not be updated as it is not editable." }
+        }
+      }
+    },
+    "/things/{thingUID}/config/status": {
+      "get": {
+        "tags": [ "things" ],
+        "summary": "Gets thing's config status.",
+        "description": "",
+        "operationId": "getConfigStatus",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thing",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Thing not found." }
+        }
+      }
+    },
+    "/things/{thingUID}/enable": {
+      "put": {
+        "tags": [ "things" ],
+        "summary": "Sets the thing enabled status.",
+        "description": "",
+        "operationId": "setEnabled",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thing",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "enabled",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Thing not found." }
+        }
+      }
+    },
+    "/things/{thingUID}/firmware/status": {
+      "get": {
+        "tags": [ "things" ],
+        "summary": "Gets thing's firmware status.",
+        "description": "",
+        "operationId": "getFirmwareStatus",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thing",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "204": { "description": "No firmware status provided by this Thing." }
+        }
+      }
+    },
+    "/things/{thingUID}/firmware/{firmwareVersion}": {
+      "put": {
+        "tags": [ "things" ],
+        "summary": "Update thing firmware.",
+        "description": "",
+        "operationId": "updateFirmware",
+        "consumes": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thing",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "firmwareVersion",
+            "in": "path",
+            "description": "version",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Firmware update preconditions not satisfied." },
+          "404": { "description": "Thing not found." }
+        }
+      }
+    },
+    "/things/{thingUID}/firmwares": {
+      "get": {
+        "tags": [ "things" ],
+        "summary": "Get all available firmwares for provided thing UID",
+        "description": "",
+        "operationId": "getFirmwares",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thingUID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "204": { "description": "No firmwares found." }
+        }
+      }
+    },
+    "/things/{thingUID}/status": {
+      "get": {
+        "tags": [ "things" ],
+        "summary": "Gets thing's status.",
+        "description": "",
+        "operationId": "getStatus",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "thingUID",
+            "in": "path",
+            "description": "thing",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          },
+          "404": { "description": "Thing not found." }
+        }
+      }
+    },
+    "/uuid": {
+      "get": {
+        "tags": [ "uuid" ],
+        "summary": "A unified unique id.",
+        "description": "",
+        "operationId": "getInstanceUUID",
+        "produces": [ "text/plain" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "string" }
+          }
+        }
+      }
+    },
+    "/voice/defaultvoice": {
+      "get": {
+        "tags": [ "voice" ],
+        "summary": "Gets the default voice.",
+        "description": "",
+        "operationId": "getDefaultVoice",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "No default voice was found." }
+        }
+      }
+    },
+    "/voice/interpreters": {
+      "get": {
+        "tags": [ "voice" ],
+        "summary": "Get the list of all interpreters.",
+        "description": "",
+        "operationId": "getVoiceInterpreters",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "post": {
+        "tags": [ "voice" ],
+        "summary": "Sends a text to the default human language interpreter.",
+        "description": "",
+        "operationId": "interpret",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "text to interpret",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "interpretation exception occurs" },
+          "404": { "description": "No human language interpreter was found." }
+        }
+      }
+    },
+    "/voice/interpreters/{id}": {
+      "get": {
+        "tags": [ "voice" ],
+        "summary": "Gets a single interpreter.",
+        "description": "",
+        "operationId": "getVoiceInterpreterByUID",
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "interpreter id",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Interpreter not found" }
+        }
+      },
+      "post": {
+        "tags": [ "voice" ],
+        "summary": "Sends a text to a given human language interpreter.",
+        "description": "",
+        "operationId": "interpret",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "language",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "text to interpret",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "interpreter id",
+            "required": true,
+            "type": "string",
+            "pattern": "[a-zA-Z_0-9]+"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "interpretation exception occurs" },
+          "404": { "description": "No human language interpreter was found." }
+        }
+      }
+    },
+    "/voice/say": {
+      "post": {
+        "tags": [ "voice" ],
+        "summary": "Speaks a given text with a given voice through the given audio sink.",
+        "description": "",
+        "operationId": "say",
+        "consumes": [ "text/plain" ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "text to speak",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "voiceid",
+            "in": "query",
+            "description": "voice id",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sinkid",
+            "in": "query",
+            "description": "audio sink id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/voice/voices": {
+      "get": {
+        "tags": [ "voice" ],
+        "summary": "Get the list of all voices.",
+        "description": "",
+        "operationId": "getVoices",
+        "produces": [ "application/json" ],
+        "parameters": [],
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  },
+  "definitions": {
+    "MetadataDTO": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "string" },
+        "config": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        }
+      }
+    },
+    "ConfigurableServiceDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "category": { "type": "string" },
+        "configDescriptionURI": { "type": "string" },
+        "multiple": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "Template": {
+      "type": "object",
+      "properties": {
+        "visibility": {
+          "type": "string",
+          "enum": [ "VISIBLE", "HIDDEN", "EXPERT" ]
+        },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "uid": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "ItemHistoryDTO": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "totalrecords": { "type": "string" },
+        "datapoints": { "type": "string" },
+        "data": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/HistoryDataBean" }
+        }
+      }
+    },
+    "EventOutput": {
+      "type": "object",
+      "properties": {
+        "type": { "$ref": "#/definitions/Type" },
+        "closed": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "EnrichedItemDTO": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "name": { "type": "string" },
+        "label": { "type": "string" },
+        "category": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "groupNames": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "link": { "type": "string" },
+        "state": { "type": "string" },
+        "transformedState": { "type": "string" },
+        "stateDescription": { "$ref": "#/definitions/StateDescription" },
+        "commandDescription": { "$ref": "#/definitions/CommandDescription" },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "editable": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "StateDescription": {
+      "type": "object",
+      "properties": {
+        "minimum": { "type": "number" },
+        "maximum": { "type": "number" },
+        "step": { "type": "number" },
+        "pattern": { "type": "string" },
+        "readOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/StateOption" }
+        }
+      }
+    },
+    "AudioSinkDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "ConfigDescriptionParameterDTO": {
+      "type": "object",
+      "properties": {
+        "context": { "type": "string" },
+        "defaultValue": { "type": "string" },
+        "description": { "type": "string" },
+        "label": { "type": "string" },
+        "name": { "type": "string" },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [ "TEXT", "INTEGER", "DECIMAL", "BOOLEAN" ]
+        },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "stepsize": { "type": "number" },
+        "pattern": { "type": "string" },
+        "readOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "multiple": {
+          "type": "boolean",
+          "default": false
+        },
+        "multipleLimit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupName": { "type": "string" },
+        "advanced": {
+          "type": "boolean",
+          "default": false
+        },
+        "verify": {
+          "type": "boolean",
+          "default": false
+        },
+        "limitToOptions": {
+          "type": "boolean",
+          "default": false
+        },
+        "unit": { "type": "string" },
+        "unitLabel": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ParameterOptionDTO" }
+        },
+        "filterCriteria": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FilterCriteriaDTO" }
+        }
+      }
+    },
+    "RuleDTO": {
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/TriggerDTO" }
+        },
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConditionDTO" }
+        },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ActionDTO" }
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "configDescriptions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterDTO" }
+        },
+        "templateUID": { "type": "string" },
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [ "VISIBLE", "HIDDEN", "EXPERT" ]
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "ChannelTypeDTO": {
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterDTO" }
+        },
+        "parameterGroups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterGroupDTO" }
+        },
+        "description": { "type": "string" },
+        "label": { "type": "string" },
+        "category": { "type": "string" },
+        "itemType": { "type": "string" },
+        "kind": { "type": "string" },
+        "stateDescription": { "$ref": "#/definitions/StateDescription" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "UID": { "type": "string" },
+        "advanced": {
+          "type": "boolean",
+          "default": false
+        },
+        "commandDescription": { "$ref": "#/definitions/CommandDescription" }
+      }
+    },
+    "ThingTypeDTO": {
+      "type": "object",
+      "properties": {
+        "UID": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "listed": {
+          "type": "boolean",
+          "default": false
+        },
+        "supportedBridgeTypeUIDs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "bridge": {
+          "type": "boolean",
+          "default": false
+        },
+        "channels": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ChannelDefinitionDTO" }
+        },
+        "channelGroups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ChannelGroupDefinitionDTO" }
+        },
+        "configParameters": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterDTO" }
+        },
+        "parameterGroups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterGroupDTO" }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "extensibleChannelTypeIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "VoiceDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "locale": { "type": "string" }
+      }
+    },
+    "ParameterOptionDTO": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    },
+    "DiscoveryResultDTO": {
+      "type": "object",
+      "properties": {
+        "bridgeUID": { "type": "string" },
+        "flag": {
+          "type": "string",
+          "enum": [ "NEW", "IGNORED" ]
+        },
+        "label": { "type": "string" },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "representationProperty": { "type": "string" },
+        "thingUID": { "type": "string" },
+        "thingTypeUID": { "type": "string" }
+      }
+    },
+    "ItemChannelLinkDTO": {
+      "type": "object",
+      "properties": {
+        "itemName": { "type": "string" },
+        "channelUID": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        }
+      }
+    },
+    "StateOption": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "StrippedThingTypeDTO": {
+      "type": "object",
+      "properties": {
+        "UID": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "listed": {
+          "type": "boolean",
+          "default": false
+        },
+        "supportedBridgeTypeUIDs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "bridge": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "TriggerDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "type": { "type": "string" }
+      }
+    },
+    "ChannelDefinitionDTO": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "category": { "type": "string" },
+        "stateDescription": { "$ref": "#/definitions/StateDescription" },
+        "advanced": {
+          "type": "boolean",
+          "default": false
+        },
+        "typeUID": { "type": "string" }
+      }
+    },
+    "HumanLanguageInterpreterDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "locales": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "HistoryDataBean": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "state": { "type": "string" }
+      }
+    },
+    "SitemapDTO": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "icon": { "type": "string" },
+        "label": { "type": "string" },
+        "link": { "type": "string" },
+        "homepage": { "$ref": "#/definitions/PageDTO" }
+      }
+    },
+    "CommandOption": {
+      "type": "object",
+      "properties": {
+        "command": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "ChannelDTO": {
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "id": { "type": "string" },
+        "channelTypeUID": { "type": "string" },
+        "itemType": { "type": "string" },
+        "kind": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "defaultTags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        }
+      }
+    },
+    "ChannelGroupDefinitionDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "label": { "type": "string" },
+        "channels": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ChannelDefinitionDTO" }
+        }
+      }
+    },
+    "WidgetDTO": {
+      "type": "object",
+      "properties": {
+        "widgetId": { "type": "string" },
+        "type": { "type": "string" },
+        "name": { "type": "string" },
+        "visibility": {
+          "type": "boolean",
+          "default": false
+        },
+        "label": { "type": "string" },
+        "icon": { "type": "string" },
+        "labelcolor": { "type": "string" },
+        "valuecolor": { "type": "string" },
+        "mappings": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/MappingDTO" }
+        },
+        "switchSupport": {
+          "type": "boolean",
+          "default": false
+        },
+        "sendFrequency": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "separator": { "type": "string" },
+        "refresh": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minValue": { "type": "number" },
+        "maxValue": { "type": "number" },
+        "step": { "type": "number" },
+        "url": { "type": "string" },
+        "encoding": { "type": "string" },
+        "service": { "type": "string" },
+        "period": { "type": "string" },
+        "legend": {
+          "type": "boolean",
+          "default": false
+        },
+        "state": { "type": "string" },
+        "item": { "$ref": "#/definitions/EnrichedItemDTO" },
+        "linkedPage": { "$ref": "#/definitions/PageDTO" },
+        "widgets": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/WidgetDTO" }
+        }
+      }
+    },
+    "BindingInfoDTO": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "description": { "type": "string" },
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "configDescriptionURI": { "type": "string" }
+      }
+    },
+    "RuleStatusInfo": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [ "UNINITIALIZED", "INITIALIZING", "IDLE", "RUNNING" ]
+        },
+        "statusDetail": {
+          "type": "string",
+          "enum": [ "NONE", "HANDLER_MISSING_ERROR", "HANDLER_INITIALIZING_ERROR", "CONFIGURATION_ERROR", "TEMPLATE_MISSING_ERROR", "INVALID_RULE", "DISABLED" ]
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "FilterCriteriaDTO": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "GroupFunctionDTO": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "params": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "AudioSourceDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "ModuleDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "type": { "type": "string" }
+      }
+    },
+    "ConfigDescriptionDTO": {
+      "type": "object",
+      "properties": {
+        "uri": { "type": "string" },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterDTO" }
+        },
+        "parameterGroups": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterGroupDTO" }
+        }
+      }
+    },
+    "PageDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "icon": { "type": "string" },
+        "link": { "type": "string" },
+        "parent": { "$ref": "#/definitions/PageDTO" },
+        "leaf": {
+          "type": "boolean",
+          "default": false
+        },
+        "timeout": {
+          "type": "boolean",
+          "default": false
+        },
+        "widgets": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/WidgetDTO" }
+        }
+      }
+    },
+    "ThingDTO": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "bridgeUID": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "UID": { "type": "string" },
+        "thingTypeUID": { "type": "string" },
+        "channels": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ChannelDTO" }
+        },
+        "location": { "type": "string" }
+      }
+    },
+    "CommandDescription": {
+      "type": "object",
+      "properties": {
+        "commandOptions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/CommandOption" }
+        }
+      }
+    },
+    "ActionDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "type": { "type": "string" },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "ThingStatusInfo": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [ "UNINITIALIZED", "INITIALIZING", "UNKNOWN", "ONLINE", "OFFLINE", "REMOVING", "REMOVED" ]
+        },
+        "statusDetail": {
+          "type": "string",
+          "enum": [ "NONE", "HANDLER_MISSING_ERROR", "HANDLER_REGISTERING_ERROR", "HANDLER_INITIALIZING_ERROR", "HANDLER_CONFIGURATION_PENDING", "CONFIGURATION_PENDING", "COMMUNICATION_ERROR", "CONFIGURATION_ERROR", "BRIDGE_OFFLINE", "FIRMWARE_UPDATING", "DUTY_CYCLE", "BRIDGE_UNINITIALIZED", "GONE", "DISABLED" ]
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "ConfigDescriptionParameterGroupDTO": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "context": { "type": "string" },
+        "advanced": {
+          "type": "boolean",
+          "default": false
+        },
+        "label": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "Type": {
+      "type": "object",
+      "properties": { "typeName": { "type": "string" } }
+    },
+    "FirmwareStatusDTO": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "updatableVersion": { "type": "string" }
+      }
+    },
+    "ModuleTypeDTO": {
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "visibility": {
+          "type": "string",
+          "enum": [ "VISIBLE", "HIDDEN", "EXPERT" ]
+        },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "configDescriptions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterDTO" }
+        }
+      }
+    },
+    "GroupItemDTO": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "name": { "type": "string" },
+        "label": { "type": "string" },
+        "category": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "groupNames": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "groupType": { "type": "string" },
+        "function": { "$ref": "#/definitions/GroupFunctionDTO" }
+      }
+    },
+    "EnrichedThingDTO": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "bridgeUID": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "UID": { "type": "string" },
+        "thingTypeUID": { "type": "string" },
+        "channels": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ChannelDTO" }
+        },
+        "location": { "type": "string" },
+        "statusInfo": { "$ref": "#/definitions/ThingStatusInfo" },
+        "firmwareStatus": { "$ref": "#/definitions/FirmwareStatusDTO" },
+        "editable": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "EnrichedRuleDTO": {
+      "type": "object",
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/TriggerDTO" }
+        },
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConditionDTO" }
+        },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ActionDTO" }
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "configDescriptions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ConfigDescriptionParameterDTO" }
+        },
+        "templateUID": { "type": "string" },
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [ "VISIBLE", "HIDDEN", "EXPERT" ]
+        },
+        "description": { "type": "string" },
+        "status": { "$ref": "#/definitions/RuleStatusInfo" }
+      }
+    },
+    "ConditionDTO": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        },
+        "type": { "type": "string" },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "MappingDTO": {
+      "type": "object",
+      "properties": {
+        "command": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "ProfileTypeDTO": {
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "label": { "type": "string" },
+        "kind": { "type": "string" },
+        "supportedItemTypes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

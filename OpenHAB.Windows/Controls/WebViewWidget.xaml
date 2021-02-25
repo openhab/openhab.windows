@@ -1,31 +1,32 @@
 ﻿<local:WidgetBase x:Class="OpenHAB.Windows.Controls.WebViewWidget"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:local="using:OpenHAB.Windows.Controls"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  d:DesignHeight="150"
-                  d:DesignWidth="300"
-                  mc:Ignorable="d">
+				  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				  xmlns:local="using:OpenHAB.Windows.Controls"
+				  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				  d:DesignHeight="150"
+				  d:DesignWidth="300"
+				  mc:Ignorable="d" 
+				  Visibility="{x:Bind Widget.Visibility, Converter={StaticResource BooleanToVisibilityConverter}}">
 
 	<Grid Style="{StaticResource Widget}"
 		  Tapped="OnTapped">
 
-        <WebView x:Name="WebView">
-            <WebView.RenderTransform>
-                <CompositeTransform ScaleY="0.5" ScaleX="0.5"/>
-            </WebView.RenderTransform>
-        </WebView>
+		<WebView x:Name="WebView">
+			<WebView.RenderTransform>
+				<CompositeTransform ScaleY="0.5" ScaleX="0.5"/>
+			</WebView.RenderTransform>
+		</WebView>
 
-        <Border Background="Transparent" CornerRadius="5" />
+		<Border Background="Transparent" CornerRadius="5" />
 
-        <ContentDialog x:Name="PopupDialog"
-                       Title="{x:Bind Widget.Label}"
-                       Background="{StaticResource OpenHABLightColor}"
-                       IsPrimaryButtonEnabled="True"
-                       PrimaryButtonText="Close">
-            <WebView x:Name="WebViewFull" Width="550" Height="300" />
-        </ContentDialog>
+		<ContentDialog x:Name="PopupDialog"
+					   Title="{x:Bind Widget.Label}"
+					   Background="{StaticResource OpenHABLightColor}"
+					   IsPrimaryButtonEnabled="True"
+					   PrimaryButtonText="Close">
+			<WebView x:Name="WebViewFull" Width="550" Height="300" />
+		</ContentDialog>
 
-    </Grid>
+	</Grid>
 </local:WidgetBase>

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using OpenHAB.Core.Common;
 using OpenHAB.Core.Model;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -24,9 +25,8 @@ namespace OpenHAB.Windows.Converters
             var itemType = GetItemViewType(widget);
             switch (itemType)
             {
-                //case WidgetTypeEnum.Color:
-                //    return ColorTemplate;
-                //    break;
+                case WidgetTypeEnum.ColorPicker:
+                    return ColorTemplate;
                 case WidgetTypeEnum.Group:
                     return PageLinkTemplate;
                 case WidgetTypeEnum.Frame:

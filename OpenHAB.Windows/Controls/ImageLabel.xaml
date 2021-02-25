@@ -1,26 +1,23 @@
-﻿
-	<UserControl x:Class="OpenHAB.Windows.Controls.ImageLabel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="300"
-             d:DesignWidth="400"
-             mc:Ignorable="d">
+﻿<UserControl x:Class="OpenHAB.Windows.Controls.ImageLabel"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 d:DesignHeight="300"
+			 d:DesignWidth="400"
+			 mc:Ignorable="d">
 
-    <StackPanel HorizontalAlignment="Stretch">
-        <Image x:Name="Icon"
-               Width="60"
-               Height="60"
-               Margin="12,0,0,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top" />
-        <ScrollViewer x:Name="LabelScrollViewer" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" >
-        <TextBlock x:Name="Label"
-                   Margin="8"
-                   Foreground="{StaticResource DarkAcrylicColor}"
-                   Text="{x:Bind LabelText, Mode=OneWay}"
-                   TextWrapping="Wrap" />
-        </ScrollViewer>
-    </StackPanel>
+	<StackPanel HorizontalAlignment="Stretch">
+		<Image x:Name="Icon"
+			   Width="60"
+			   Height="60"
+			   Margin="12,0,0,0"
+			   HorizontalAlignment="Left"
+			   VerticalAlignment="Top" />
+		<TextBlock x:Name="Label"
+				   Margin="8"
+				   Foreground="{x:Bind LabelForeground, Mode=OneWay}"
+				   Text="{x:Bind LabelText, Mode=OneWay}"
+				   TextTrimming="WordEllipsis" />
+	</StackPanel>
 </UserControl>
