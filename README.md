@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/openhab/openhab-windows)
+
 ## Introduction
 
 openHAB Windows application is a native client for openHAB. It uses REST API of openHAB to render
