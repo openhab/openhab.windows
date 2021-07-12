@@ -12,6 +12,14 @@ inputs:
     required: false
     default: '${{github.workspace}}\build'
 
+  GITHUB_TOKEN: 
+    description: 'Token for Authentication with GitHub'
+    required: true
+
+  SONAR_TOKEN: 
+    description: 'Token for Authentication with Sonar Cloud'
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -27,9 +35,16 @@ runs:
             ./Set-Version.ps1 -SourceDirectory '${{github.workspace}}\src\' -Major $major -Minor $minor -Build $build -Revision 0 -SetVersion
 
     - name: Restore nuget packages
-      shell: cmd
-      run: nuget restore ${{github.workspace}}\src\OpenHAB.Windows.sln
+      shell: pwsh
+      run: |
+            Write-Host "==== Restore Nuget packages ====" -ForegroundColor Green
+            nuget restore ${{github.workspace}}\src\OpenHAB.Windows.sln
     
     - name: Build OpenHab Windows App
-      shell: cmd
-      run: msbuild.exe ${{github.workspace}}\src\OpenHAB.Windows.sln /p:AppxBundlePlatforms="x86|x64|ARM" /p:AppxPackageDir="${{inputs.output_directory}}" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:configuration="${{inputs.build_configuration}}"
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{inputs.GITHUB_TOKEN}}
+        SONAR_TOKEN: ${{inputs.SONAR_TOKEN}}
+      run: |
+          Write-Host "==== Build app package ====" -ForegroundColor Green
+          msbuild.exe ${{github.workspace}}\src\OpenHAB.Windows.sln /p:Platform="x86" /p:AppxBundlePlatforms="x86|x64|ARM" /p:AppxPackageDir="${{inputs.output_directory}}" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:configuration="${{inputs.build_configuration}}" /t:rebuild
